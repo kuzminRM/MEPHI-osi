@@ -1,0 +1,62 @@
+;параметры:  address (число), userdata (буфер)
+out  "n data __recived"
+; проверяем размер полученного буфера
+sizeof(userdata) < 3 if too_short_userdata_tag
+out "length ok"
+
+; проверяем контрольную сумму
+userdata unbufferit crcFromInput 1 userDataNoCrc sizeof(userdata)-1
+varcrc crcCalculated $userDataNoCrc
+$crcFromInput != $crcCalculated if crc_compare_fail_tag
+out "crc ok"
+
+; распаковываем
+userDataNoCrc unbufferit currentReqNumInput 1 entityNum 1 transportUserData sizeof(userDataNoCrc)-2
+out "unpack ok"
+
+; если порядковый номер тот, что мы сейчас ждем, то начинаем ждать следующий номер
+$currentReqNum != $currentReqNumInput if number_compare_fail_tag
+$currentReqNum + 1 setto currentReqNum
+
+; определяем какой запрос пришел
+$entityNum == 1 if t_con_req_tag
+$entityNum == 3 if t_con_resp_tag
+$entityNum == 5 if t_discon_req_tag
+$entityNum == 7 if t_data_req_tag
+out "some unknown entityNum = " $entityNum
+
+return
+
+too_short_userdata_tag:
+out "too short user data" $userdata
+return
+
+crc_compare_fail_tag:
+out "crc compare fail"
+return
+
+number_compare_fail_tag:
+out "number compare fail wait for " $currentReqNum " actual " $currentReqNumInput
+return
+
+t_con_req_tag:
+out "received t con req"
+$address setto connectedAddr
+address $address sendup T_CONNECT.IND
+return
+
+t_con_resp_tag:
+out "received t con resp"
+$address setto connectedAddr
+address $address sendup T_CONNECT.CONF
+return
+
+t_discon_req_tag:
+out "received t discon req"
+sendup T_DISCONNECT.IND
+return
+
+t_data_req_tag:
+out "received t data req"
+userdata $transportUserData sendup T_DATA.IND
+return

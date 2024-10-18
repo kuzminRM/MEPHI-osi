@@ -1,0 +1,4 @@
+/.env.local*
+/.env
+/.idea
+__pycache__/
