@@ -1,7 +1,7 @@
 ;параметры:  address (число)
 out "t con resp __start"
 3 setto entityNum
-userDataNoCrc pack  $currentReqNum 1 $entityNum 1 2
+userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
 transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) sizeof(userDataNoCrc)+1
 
@@ -11,9 +11,9 @@ while_tag:
 $i + 1 setto i
 
 address $connectedAddr userdata $transportUserData eventdown N_DATAGRAM.REQ
-out "send n data req with " $currentReqNum " | " $i " of " $SEND_DATA_N_TIMES
+out "send n data req with " $currentReqNumMy " | " $i " of " $SEND_DATA_N_TIMES
 
 $i < $SEND_DATA_N_TIMES if while_tag
 
-; увеличиваем currentReqNum
-$currentReqNum + 1 setto currentReqNum
+; увеличиваем currentReqNumMy
+$currentReqNumMy+ 1 setto currentReqNumMy

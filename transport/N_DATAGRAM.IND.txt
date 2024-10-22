@@ -15,8 +15,8 @@ userDataNoCrc unbufferit currentReqNumInput 1 entityNum 1 transportUserData size
 out "unpack ok"
 
 ; если порядковый номер тот, что мы сейчас ждем, то начинаем ждать следующий номер
-$currentReqNum != $currentReqNumInput if number_compare_fail_tag
-$currentReqNum + 1 setto currentReqNum
+$currentReqNumTheir != $currentReqNumInput if number_compare_fail_tag
+$currentReqNumTheir + 1 setto currentReqNumTheir
 
 ; определяем какой запрос пришел
 $entityNum == 1 if t_con_req_tag
@@ -36,7 +36,7 @@ out "crc compare fail"
 return
 
 number_compare_fail_tag:
-out "number compare fail wait for " $currentReqNum " actual " $currentReqNumInput
+out "number compare fail wait for " $currentReqNumTheir " actual " $currentReqNumInput
 return
 
 t_con_req_tag:
@@ -54,6 +54,7 @@ return
 t_discon_req_tag:
 out "received t discon req"
 sendup T_DISCONNECT.IND
+0 setto currentReqNumTheir
 return
 
 t_data_req_tag:

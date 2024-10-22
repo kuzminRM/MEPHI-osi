@@ -9,10 +9,13 @@
 
 integer declare SEND_DATA_N_TIMES
 integer declare i
-integer declare currentReqNum
+integer declare currentReqNumMy
+integer declare currentReqNumTheir
 integer declare currentReqNumInput
-0 setto currentReqNum
+0 setto currentReqNumMy
+0 setto currentReqNumTheir
 3 setto SEND_DATA_N_TIMES
+
 
 integer declare entityNum
 integer declare connectedAddr
