@@ -1,10 +1,10 @@
 ;параметры:  address (число)
-out "t con req __start"
-1 setto entityNum
+out CurrentSystemName() " t diccon req __start"
+5 setto entityNum
 userDataNoCrc pack $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
 transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) sizeof(userDataNoCrc)+1
-$address setto connectedAddr
+
 
 ; оправляем несколько пакетов подряд в цикле
 0 setto i ;
@@ -16,5 +16,6 @@ out "send n data req with " $currentReqNumMy " | " $i " of " $SEND_DATA_N_TIMES
 
 $i < $SEND_DATA_N_TIMES if while_tag
 
-; увеличиваем currentReqNumMy
-$currentReqNumMy + 1 setto currentReqNumMy
+; сбрасываем currentReqNum
+0 setto currentReqNumMy
+0 setto currentReqNumTheir

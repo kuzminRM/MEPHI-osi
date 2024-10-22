@@ -1,5 +1,5 @@
 ;параметры:   userdata (буфер)
-out "t con resp __start"
+out CurrentSystemName() " t data req __start"
 7 setto entityNum
 userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 $userdata sizeof(userdata) sizeof(userdata)+2
 varcrc crcCalculated $userDataNoCrc

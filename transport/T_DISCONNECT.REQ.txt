@@ -1,7 +1,7 @@
 ;параметры:  address (число)
-out "t diccon req __start"
+out CurrentSystemName() " t diccon req __start"
 5 setto entityNum
-userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 2
+userDataNoCrc pack $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
 transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) sizeof(userDataNoCrc)+1
 
@@ -16,5 +16,6 @@ out "send n data req with " $currentReqNumMy " | " $i " of " $SEND_DATA_N_TIMES
 
 $i < $SEND_DATA_N_TIMES if while_tag
 
-; сбрасываем currentReqNumMy
+; сбрасываем currentReqNum
 0 setto currentReqNumMy
+0 setto currentReqNumTheir

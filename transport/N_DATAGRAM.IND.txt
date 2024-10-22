@@ -1,5 +1,5 @@
 ;параметры:  address (число), userdata (буфер)
-out  "n data __recived"
+out CurrentSystemName() " n datagrams __start"
 ; проверяем размер полученного буфера
 sizeof(userdata) < 3 if too_short_userdata_tag
 out "length ok"
@@ -13,6 +13,18 @@ out "crc ok"
 ; распаковываем
 userDataNoCrc unbufferit currentReqNumInput 1 entityNum 1 transportUserData sizeof(userDataNoCrc)-2
 out "unpack ok"
+
+; если к нам пришел запрос на connect, то насильно сбрасываем счетчики запросов
+$entityNum != 1 if skip_set_zero_tocorrebt_req_num_tag
+0 setto currentReqNumMy
+$currentReqNumTheir == 1 if skip_set_zero_tocorrebt_req_num_tag
+0 setto currentReqNumTheir
+skip_set_zero_tocorrebt_req_num_tag:
+
+; если пришло число больше чем мы ждем, то забываем про "пропущенный/ые" пакет/ы, считаем что он потерян
+$currentReqNumTheir >= $currentReqNumInput if skip_input_more_then_their_tag
+$currentReqNumInput setto currentReqNumTheir
+skip_input_more_then_their_tag:
 
 ; если порядковый номер тот, что мы сейчас ждем, то начинаем ждать следующий номер
 $currentReqNumTheir != $currentReqNumInput if number_compare_fail_tag
@@ -54,6 +66,7 @@ return
 t_discon_req_tag:
 out "received t discon req"
 sendup T_DISCONNECT.IND
+0 setto currentReqNumMy
 0 setto currentReqNumTheir
 return
 

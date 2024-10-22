@@ -1,5 +1,5 @@
 ;параметры:  address (число)
-out "t con resp __start"
+out CurrentSystemName() " t con resp __start"
 3 setto entityNum
 userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
