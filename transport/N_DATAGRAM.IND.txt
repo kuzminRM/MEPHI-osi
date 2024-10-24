@@ -39,6 +39,10 @@ out "some unknown entityNum = " $entityNum
 
 return
 
+we_are_dicronnected_tag:
+out "we are disconnected"
+return
+
 too_short_userdata_tag:
 out "too short user data" $userdata
 return
@@ -53,6 +57,7 @@ return
 
 t_con_req_tag:
 out "received t con req"
+0 setto isDisconnected
 $address setto connectedAddr
 address $address sendup T_CONNECT.IND
 return
@@ -64,8 +69,11 @@ address $address sendup T_CONNECT.CONF
 return
 
 t_discon_req_tag:
+; проверяем что мы не находимся в состоянии isDisconnected
+$isDisconnected == 1 if we_are_dicronnected_tag
 out "received t discon req"
 sendup T_DISCONNECT.IND
+1 setto isDisconnected
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
 return

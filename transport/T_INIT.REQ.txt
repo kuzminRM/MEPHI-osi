@@ -9,12 +9,14 @@
 
 integer declare SEND_DATA_N_TIMES
 integer declare i
+integer declare isDisconnected
 integer declare currentReqNumMy
 integer declare currentReqNumTheir
 integer declare currentReqNumInput
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
-3 setto SEND_DATA_N_TIMES
+1 setto isDisconnected
+4 setto SEND_DATA_N_TIMES
 
 
 integer declare entityNum
