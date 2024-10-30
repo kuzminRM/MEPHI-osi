@@ -18,6 +18,11 @@ integer declare currentReqNumInput
 1 setto isDisconnected
 4 setto SEND_DATA_N_TIMES
 
+queue declare sendQueue
+integer declare delayTimer
+integer declare DELAY_TIME
+0 setto delayTimer
+11 setto DELAY_TIME
 
 integer declare entityNum
 integer declare connectedAddr

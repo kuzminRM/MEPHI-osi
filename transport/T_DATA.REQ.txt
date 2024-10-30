@@ -5,6 +5,9 @@ userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 $userdata sizeof(userdata) s
 varcrc crcCalculated $userDataNoCrc
 transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) sizeof(userDataNoCrc)+1
 
+; если сейчас работает таймер, то кладем новые данные в очередь, иначе сразу отправляем
+$delayTimer != 0 if queue_new_data_tag
+
 ; оправляем несколько пакетов подряд в цикле
 0 setto i ;
 while_tag:
@@ -15,5 +18,16 @@ out "send n data req with " $currentReqNumMy " | " $i " of " $SEND_DATA_N_TIMES
 
 $i < $SEND_DATA_N_TIMES if while_tag
 
+timeevent T_DELAY_TIMER delayTimer $DELAY_TIME
+goto finally_tag
+return
+
+queue_new_data_tag:
+queue $transportUserData  sendQueue
+goto finally_tag
+return
+
+finally_tag:
 ; увеличиваем currentReqNumMy
 $currentReqNumMy + 1 setto currentReqNumMy
+return
