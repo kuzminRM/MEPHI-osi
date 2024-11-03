@@ -5,29 +5,21 @@ userDataNoCrc pack $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
 transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) sizeof(userDataNoCrc)+1
 
-; если сейчас работает таймер, то кладем новые данные в очередь, иначе сразу отправляем
-$delayTimer != 0 if queue_new_data_tag
+; если сейчас работает таймер, то пропускаем моментальную отправку данных
+queue $transportUserData  sendQueue
+$delayTimer != 0 if skip_send_now_tag
 
-; оправляем несколько пакетов подряд в цикле
+; оправляем несколько пакетов подряд в цикле и запускаем таймер
 0 setto i ;
+out "send n data req with " $currentReqNumMy
 while_tag:
 $i + 1 setto i
-
 address $connectedAddr userdata $transportUserData eventdown N_DATAGRAM.REQ
-out "send n data req with " $currentReqNumMy " | " $i " of " $SEND_DATA_N_TIMES
-
 $i < $SEND_DATA_N_TIMES if while_tag
 
 timeevent T_DELAY_TIMER delayTimer $DELAY_TIME
-goto finally_tag
-return
+skip_send_now_tag:
 
-queue_new_data_tag:
-queue $transportUserData  sendQueue
-goto finally_tag
-return
-
-finally_tag:
 ; сбрасываем currentReqNum
 0 setto currentReqNumMy
 0 setto currentReqNumTheir

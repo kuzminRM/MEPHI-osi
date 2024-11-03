@@ -6,6 +6,7 @@
 ; 6 - T_DISCONNECT.IND
 ; 7 - T_DATA.REQ
 ; 8 - T_DATA.IND
+; 9 - MY_INNER_T_DATA.RESP
 
 integer declare SEND_DATA_N_TIMES
 integer declare i
@@ -16,16 +17,21 @@ integer declare currentReqNumInput
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
 1 setto isDisconnected
-4 setto SEND_DATA_N_TIMES
+1 setto SEND_DATA_N_TIMES
 
 queue declare sendQueue
 integer declare delayTimer
 integer declare DELAY_TIME
 0 setto delayTimer
-11 setto DELAY_TIME
+40 setto DELAY_TIME
 
 integer declare entityNum
 integer declare connectedAddr
+
+buffer declare transportDataMyInnerConfiramtion
+integer declare crcFromQueueMyInnerConfiramtion
+integer declare currentReqNumQueueMyInnerConfiramtion
+integer declare entityNumQueueMyInnerConfiramtion
 
 buffer declare transportUserData
 buffer declare userDataNoCrc

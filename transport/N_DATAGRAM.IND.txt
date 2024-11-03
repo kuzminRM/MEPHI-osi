@@ -1,5 +1,5 @@
 ;параметры:  address (число), userdata (буфер)
-out CurrentSystemName() " n datagrams __start"
+out CurrentSystemName() " n datagram __start"
 ; проверяем размер полученного буфера
 sizeof(userdata) < 3 if too_short_userdata_tag
 out "length ok"
@@ -13,6 +13,9 @@ out "crc ok"
 ; распаковываем
 userDataNoCrc unbufferit currentReqNumInput 1 entityNum 1 transportUserData sizeof(userDataNoCrc)-2
 out "unpack ok"
+
+; если это MY_INNER_T_DATA.RESP, то у него особый путь
+$entityNum == 9 if my_inner_t_data_resp_tag
 
 ; если к нам пришел запрос на connect, то насильно сбрасываем счетчики запросов
 $entityNum != 1 if skip_set_zero_tocorrebt_req_num_tag
@@ -29,6 +32,10 @@ skip_input_more_then_their_tag:
 ; если порядковый номер тот, что мы сейчас ждем, то начинаем ждать следующий номер
 $currentReqNumTheir != $currentReqNumInput if number_compare_fail_tag
 $currentReqNumTheir + 1 setto currentReqNumTheir
+
+; отправялем подтверждения
+goto send_my_inner_t_data_resp_tag
+send_my_inner_t_data_resp_back_tag:
 
 ; определяем какой запрос пришел
 $entityNum == 1 if t_con_req_tag
@@ -81,4 +88,29 @@ return
 t_data_req_tag:
 out "received t data req"
 userdata $transportUserData sendup T_DATA.IND
+return
+
+send_my_inner_t_data_resp_tag:
+out "sendind data confirmation"
+transportDataMyInnerConfiramtion pack $crcFromInput 1 $currentReqNumInput 1 9 1 $entityNum 1 4
+0 setto i ;
+while_tag:
+$i + 1 setto i
+address $connectedAddr userdata $transportDataMyInnerConfiramtion eventdown N_DATAGRAM.REQ
+$i < $SEND_DATA_N_TIMES if while_tag
+goto send_my_inner_t_data_resp_back_tag
+return
+
+my_inner_t_data_resp_tag:
+out "received my inner t data resp"
+; получаем нужные нам данные
+qcount (sendQueue) == 0 if skip_my_inner_t_data_resp_tag
+peek (sendQueue) setto transportDataMyInnerConfiramtion
+transportDataMyInnerConfiramtion unbufferit crcFromQueueMyInnerConfiramtion 1 currentReqNumQueueMyInnerConfiramtion 1 entityNumQueueMyInnerConfiramtion 1
+; если порядковый номер подтвержденного пакета равен
+; порядковому номеру того пакета который сейчас крайний в очереди, то убираем его из очереди
+; т.е. производим процесс подтверждения
+$currentReqNumQueueMyInnerConfiramtion != $currentReqNumInput if skip_my_inner_t_data_resp_tag
+dequeue (sendQueue) setto transportDataMyInnerConfiramtion
+skip_my_inner_t_data_resp_tag:
 return

@@ -1,0 +1,32 @@
+out CurrentSystemName() " t delay tim __start"
+
+; для дебагинга
+out "qcount " qcount (sendQueue)
+
+; если очереь пуста, то сбрасываем таймер
+qcount (sendQueue) == 0 if drop_timer_tag
+; иначе отправялем то что лежит и устанавливаем новый таймер
+
+; получаем то, что лежит в очереди
+peek (sendQueue) setto transportUserData
+
+; для дебагинга
+transportUserData unbufferit crcFromQueueMyInnerConfiramtion 1 currentReqNumQueueMyInnerConfiramtion 1 entityNumQueueMyInnerConfiramtion 1
+out "Sent from sendQueue : req num = " $currentReqNumQueueMyInnerConfiramtion ", ent num = " $entityNumQueueMyInnerConfiramtion
+
+; оправляем несколько пакетов подряд в цикле
+0 setto i ;
+while_tag:
+$i + 1 setto i
+address $connectedAddr userdata $transportUserData eventdown N_DATAGRAM.REQ
+$i < $SEND_DATA_N_TIMES if while_tag
+
+0 setto delayTimer
+; устанавливаем новый таймер
+timeevent T_DELAY_TIMER delayTimer $DELAY_TIME
+
+return
+
+drop_timer_tag:
+0 setto delayTimer
+return
