@@ -17,7 +17,7 @@ integer declare currentReqNumInput
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
 1 setto isDisconnected
-1 setto SEND_DATA_N_TIMES
+3 setto SEND_DATA_N_TIMES
 
 queue declare sendQueue
 integer declare delayTimer

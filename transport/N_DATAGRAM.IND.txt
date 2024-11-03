@@ -33,9 +33,8 @@ skip_input_more_then_their_tag:
 $currentReqNumTheir != $currentReqNumInput if number_compare_fail_tag
 $currentReqNumTheir + 1 setto currentReqNumTheir
 
-; отправялем подтверждения
-goto send_my_inner_t_data_resp_tag
-send_my_inner_t_data_resp_back_tag:
+; отправялем подтверждение (одно)
+subprog send_my_inner_t_data_resp_subprog
 
 ; определяем какой запрос пришел
 $entityNum == 1 if t_con_req_tag
@@ -60,6 +59,8 @@ return
 
 number_compare_fail_tag:
 out "number compare fail wait for " $currentReqNumTheir " actual " $currentReqNumInput
+; отправялем подтверждение (одно)
+subprog send_my_inner_t_data_resp_subprog
 return
 
 t_con_req_tag:
@@ -90,15 +91,13 @@ out "received t data req"
 userdata $transportUserData sendup T_DATA.IND
 return
 
-send_my_inner_t_data_resp_tag:
-out "sendind data confirmation"
+substart send_my_inner_t_data_resp_subprog
+out "sending data confirmation : req num = " $currentReqNumInput ", ent num = " $entityNum
 transportDataMyInnerConfiramtion pack $crcFromInput 1 $currentReqNumInput 1 9 1 $entityNum 1 4
-0 setto i ;
-while_tag:
-$i + 1 setto i
+
 address $connectedAddr userdata $transportDataMyInnerConfiramtion eventdown N_DATAGRAM.REQ
-$i < $SEND_DATA_N_TIMES if while_tag
-goto send_my_inner_t_data_resp_back_tag
+
+subend
 return
 
 my_inner_t_data_resp_tag:
