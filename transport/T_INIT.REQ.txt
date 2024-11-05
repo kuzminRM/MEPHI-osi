@@ -17,7 +17,7 @@ integer declare currentReqNumInput
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
 1 setto isDisconnected
-3 setto SEND_DATA_N_TIMES
+1 setto SEND_DATA_N_TIMES
 
 queue declare sendQueue
 integer declare delayTimer
@@ -28,7 +28,10 @@ integer declare DELAY_TIME
 integer declare entityNum
 integer declare connectedAddr
 
+buffer declare transportDataNoCrcMyInnerConfiramtion
 buffer declare transportDataMyInnerConfiramtion
+integer declare calculatedCrcMyInnerConfiramtion
+
 integer declare crcFromQueueMyInnerConfiramtion
 integer declare currentReqNumQueueMyInnerConfiramtion
 integer declare entityNumQueueMyInnerConfiramtion

@@ -2,6 +2,8 @@
 out CurrentSystemName() " t con req __start"
 0 setto currentReqNumMy
 0 setto currentReqNumTheir
+0 setto isDisconnected
+clearqueue sendQueue
 1 setto entityNum
 userDataNoCrc pack $currentReqNumMy 1 $entityNum 1 2
 varcrc crcCalculated $userDataNoCrc
@@ -10,6 +12,7 @@ $address setto connectedAddr
 
 ; если сейчас работает таймер, то пропускаем моментальную отправку данных
 queue $transportUserData  sendQueue
+out "put to queue"
 $delayTimer != 0 if skip_send_now_tag
 
 ; оправляем несколько пакетов подряд в цикле и запускаем таймер

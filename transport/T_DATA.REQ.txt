@@ -1,5 +1,6 @@
 ;параметры:   userdata (буфер)
 out CurrentSystemName() " t data req __start"
+break
 7 setto entityNum
 userDataNoCrc pack  $currentReqNumMy 1 $entityNum 1 $userdata sizeof(userdata) sizeof(userdata)+2
 varcrc crcCalculated $userDataNoCrc
@@ -7,6 +8,7 @@ transportUserData pack $crcCalculated 1 $userDataNoCrc sizeof(userDataNoCrc) siz
 
 ; если сейчас работает таймер, то пропускаем моментальную отправку данных
 queue $transportUserData  sendQueue
+out "put to queue"
 $delayTimer != 0 if skip_send_now_tag
 
 ; оправляем несколько пакетов подряд в цикле и запускаем таймер
