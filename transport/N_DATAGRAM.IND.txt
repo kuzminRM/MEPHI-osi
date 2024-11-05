@@ -17,13 +17,6 @@ out "unpack ok : req num " $currentReqNumInput ", ent num " $entityNum
 ; если это MY_INNER_T_DATA.RESP, то у него особый путь
 $entityNum == 9 if my_inner_t_data_resp_tag
 
-; если к нам пришел запрос на connect, то насильно сбрасываем счетчики запросов
-$entityNum != 1 if skip_set_zero_tocorrebt_req_num_tag
-0 setto currentReqNumMy
-$currentReqNumTheir == 1 if skip_set_zero_tocorrebt_req_num_tag
-0 setto currentReqNumTheir
-skip_set_zero_tocorrebt_req_num_tag:
-
 ; если порядковый номер тот, что мы сейчас ждем, то начинаем ждать следующий номер
 $currentReqNumTheir != $currentReqNumInput if number_compare_fail_tag
 $currentReqNumTheir + 1 setto currentReqNumTheir
