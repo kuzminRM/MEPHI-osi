@@ -1,0 +1,55 @@
+;параметры:  userdata (буфер)
+out CurrentSystemName() "t data ind __start"
+
+; достаем entityNum
+userdata unbufferit entityNum 1 dataReceived sizeof(userdata)-1
+
+; определяем какой запрос пришел
+$entityNum == 1 if s_con_req_tag
+$entityNum == 2 if s_con_resp_tag
+
+return
+
+s_con_req_tag:
+out "received s_con_req"
+
+; распаковываем все что получили
+dataReceived unbufferit addressFromConnectReq 1 qualityFromConnectReq 2 demandFromConnectReq 1
+
+; мы не инициатор
+0 setto weAreInitiator
+
+; запоминаем токены
+demandFromConnectReq unbufferit demandInt 1
+$demandInt == 1 if demand_1_tag
+$demandInt == 2 if demand_2_tag
+$demandInt == 3 if demand_3_tag
+$demandInt == 4 if demand_4_tag
+out "err : no such demand " $demandInt
+demand_1_tag:
+0 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_2_tag:
+1 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_3_tag:
+0 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_4_tag:
+1 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_final_tag:
+out "weAreInitiator = " $weAreInitiator ", weHaveDToken = " $weHaveSToken ", weHaveSToken = " $weHaveSToken
+
+; отправляем без изменений
+address $address quality $qualityFromConnectReq demand $demandFromConnectReq sendup S_CONNECT.IND
+return
+
+s_con_resp_tag:
+; отправляем
+quality $dataReceived sendup S_CONNECT.CONF
+return

@@ -1,0 +1,5 @@
+;параметры:  address (число), quality (буфер)
+out CurrentSystemName() "s connect resp __start"
+
+dataToSend pack 2 1 $quality 2 3
+userdata $dataToSend eventdown T_DATA.REQ

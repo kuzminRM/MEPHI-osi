@@ -1,0 +1,16 @@
+; 1 - из T_CONNECT.CONF - данные по S_CONNECT.REQ (буффер длины 4)
+; 2 - S_CONNECT.RESP
+
+integer declare addressFromConnectReq
+buffer declare qualityFromConnectReq
+buffer declare demandFromConnectReq
+
+buffer declare dataToSend
+buffer declare dataReceived
+
+integer declare entityNum
+
+integer declare demandInt
+integer declare weAreInitiator
+integer declare weHaveDToken
+integer declare weHaveSToken

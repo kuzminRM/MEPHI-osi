@@ -1,0 +1,35 @@
+;параметры:  address (число)
+out CurrentSystemName() "t connect conf __start"
+
+; мы инициатор
+1 setto weAreInitiator
+
+; запоминаем токены
+demandFromConnectReq unbufferit demandInt 1
+$demandInt == 1 if demand_1_tag
+$demandInt == 2 if demand_2_tag
+$demandInt == 3 if demand_3_tag
+$demandInt == 4 if demand_4_tag
+out "err : no such demand " $demandInt
+demand_1_tag:
+1 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_2_tag:
+0 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_3_tag:
+1 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_4_tag:
+0 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_final_tag:
+out "weAreInitiator = " $weAreInitiator ", weHaveDToken = " $weHaveSToken ", weHaveSToken = " $weHaveSToken
+
+; отправляем данные
+dataToSend pack 1 1 $addressFromConnectReq 1 $qualityFromConnectReq 2 $demandFromConnectReq 1 5
+userdata $dataToSend eventdown T_DATA.REQ
