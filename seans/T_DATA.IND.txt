@@ -7,6 +7,7 @@ userdata unbufferit entityNum 1 dataReceived sizeof(userdata)-1
 ; определяем какой запрос пришел
 $entityNum == 1 if s_con_req_tag
 $entityNum == 2 if s_con_resp_tag
+$entityNum == 3 if s_u_abort_req_tag
 
 return
 
@@ -46,10 +47,17 @@ demand_final_tag:
 out "weAreInitiator = " $weAreInitiator ", weHaveDToken = " $weHaveSToken ", weHaveSToken = " $weHaveSToken
 
 ; отправляем без изменений
-address $address quality $qualityFromConnectReq demand $demandFromConnectReq sendup S_CONNECT.IND
+address $addressFromConnectReq quality $qualityFromConnectReq demand $demandFromConnectReq sendup S_CONNECT.IND
 return
 
 s_con_resp_tag:
 ; отправляем
 quality $dataReceived sendup S_CONNECT.CONF
+return
+
+s_u_abort_req_tag:
+; разединяем транспорт
+address $addressFromConnectReq eventdown T_DISCONNECT.REQ
+; отправляем индикацию
+sendup S_U_ABORT.IND
 return

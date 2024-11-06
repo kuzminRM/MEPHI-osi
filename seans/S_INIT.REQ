@@ -1,5 +1,6 @@
 ; 1 - из T_CONNECT.CONF - данные по S_CONNECT.REQ (буффер длины 4)
 ; 2 - S_CONNECT.RESP
+; 3 - S_U_ABORT.REQ
 
 integer declare addressFromConnectReq
 buffer declare qualityFromConnectReq
