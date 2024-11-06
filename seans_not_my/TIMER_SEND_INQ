@@ -1,0 +1,6 @@
+if end  ($upinQcount == 0)
+setvar dequeue(inQ) inQdata
+eventup S_DATA.IND userdata $inQdata
+TIMER_SEND_INQ sendinQtimer  timeevent 1
+setvar $upinQcount - 1 upinQcount
+end:

@@ -1,0 +1,20 @@
+if stoptrytodiscon ($normdiscontimes  == 0)
+if wait (qcount(outQ) > 0)
+if request ($conninitiator == 1)
+T_DISCONNECT.REQ eventdown address $addressA
+TIMER_RESET_VARS resetvars  timeevent 1
+goto end
+request:
+pack 12 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+goto end
+wait:
+TIMER_NORM_DISCONNECT normdiscontimer  timeevent 250
+setvar $normdiscontimes  - 1 normdiscontimes
+goto end
+stoptrytodiscon:
+if end ($conninitiator == 0)
+pack 13 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+setvar 1 unconduserdiscon
+end:

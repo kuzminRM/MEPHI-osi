@@ -1,0 +1,19 @@
+;параметры:   userdata (буфер) - данные
+setvar 0 syncflag
+setvar 0 resyncflag
+crc crcoutpacket $userdata
+setvar $outsumcrc + $crcoutpacket outsumcrc
+queuevalue outQ $userdata
+if noDtoken  ($hasDtoken == 0)
+pack 3 1 $userdata sizeof (userdata) sizeof (userdata) + 1 packet
+T_DATA.REQ eventdown userdata $packet
+goto end
+noDtoken:
+if tokenislost ($sentDtoken == 1)
+eventup S_P_EXCEPTION.IND error 1
+setvar 1 sentDtoken
+goto end
+tokenislost:
+pack 6 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+end:

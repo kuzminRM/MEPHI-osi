@@ -1,0 +1,16 @@
+;параметры:  нет
+if end ($resyncflag == 1)
+if noStoken  ($hasStoken == 0)
+pack 4 1 $outsumcrc 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+setvar 1 syncflag
+goto end
+noStoken:
+if tokenislost ($sentStoken == 1)
+eventup S_P_EXCEPTION.IND error 2
+setvar 1 sentStoken
+goto end
+tokenislost:
+pack 6 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+end:

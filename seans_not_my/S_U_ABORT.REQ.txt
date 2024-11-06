@@ -1,0 +1,4 @@
+;параметры:  нет
+pack 13 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+setvar 1 unconduserdiscon

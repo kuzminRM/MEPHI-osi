@@ -1,0 +1,8 @@
+;параметры:  address (число) - адрес системы, которой адресован запрос, quality (буфер) - качество обслуживания, demand (буфер) - требования по обслуживанию
+setvar $address addressB
+demand unbufferit tokens 1
+T_CONNECT.REQ eventdown address $addressB
+TIMER_RECONNECT reconntimer timeevent 260
+setvar 1 isconnecting
+setvar 1 conninitiator
+setvar 1 tryconncount

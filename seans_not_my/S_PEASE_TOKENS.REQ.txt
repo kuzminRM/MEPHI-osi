@@ -1,0 +1,16 @@
+;параметры:  token (число): 1 - маркер данных, 2-маркер синхронизации
+if givetoken $resyncflag
+setvar $token requestedtoken
+pack 7 1 $token 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+if Dtoken  ($token == 1)
+if Stoken ($token == 2)
+Dtoken:
+setvar 1 sentDtoken
+goto end
+Stoken:
+setvar 1 sentStoken
+goto end
+givetoken:
+eventup S_GIVE_TOKENS.IND token $token
+end:

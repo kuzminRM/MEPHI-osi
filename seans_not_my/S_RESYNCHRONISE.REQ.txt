@@ -1,0 +1,6 @@
+;параметры:  token (число): 1 - маркер данных, 2-маркер синхронизации
+pack 10 1 $token 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+setvar 0 insumcrc
+clearqueue inQ
+setvar 1 resyncflag

@@ -1,0 +1,31 @@
+;параметры:  token (число): 1 - маркер данных, 2-маркер синхронизации
+pack 11 1 $token 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+if Stoken ($token == 1)
+if Dtoken ($token == 2)
+if notoken  ($token == 3)
+if SDtoken ($token == 4)
+SDtoken:
+setvar 1 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentDtoken
+setvar 1 sentStoken
+goto end
+notoken:
+setvar 0 hasDtoken
+setvar 0 hasStoken
+setvar 0 sentDtoken
+setvar 0 sentStoken
+goto end
+Dtoken:
+setvar 1 hasDtoken
+setvar 0 hasStoken
+setvar 1 sentDtoken
+setvar 0 sentStoken
+goto end
+Stoken:
+setvar 0 hasDtoken
+setvar 1 hasStoken
+setvar 0 sentDtoken
+setvar 1 sentStoken
+end:

@@ -1,0 +1,28 @@
+;параметры:  address (число)
+untimer $reconntimer
+pack 1 1 $tokens 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+if DStoken  ($tokens == 1)
+if notoken ($tokens == 2)
+if Dtoken ($tokens == 3)
+if Stoken  ($tokens == 4)
+DStoken:
+setvar 1 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentDtoken
+setvar 1 sentStoken
+goto end
+notoken:
+setvar 0 hasDtoken
+setvar 0 hasStoken
+goto end
+Dtoken:
+setvar 1 hasDtoken
+setvar 0 hasStoken
+setvar 1 sentDtoken
+goto end
+Stoken:
+setvar 0 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentStoken
+end:

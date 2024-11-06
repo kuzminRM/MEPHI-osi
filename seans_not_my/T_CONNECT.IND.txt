@@ -1,0 +1,3 @@
+;параметры:  address (число)
+setvar $address addressA
+T_CONNECT.RESP eventdown address $address

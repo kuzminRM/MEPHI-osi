@@ -1,0 +1,4 @@
+;параметры:  address (число) - адрес системы, которой адресован ответ, quality (буфер) - качество обслуживания
+pack 2 1 $quality sizeof (quality) sizeof (quality) + 1 packet
+T_DATA.REQ eventdown userdata $packet
+setvar 0 unconduserdiscon

@@ -1,0 +1,12 @@
+if empty  ($resyncoutQcount == 0)
+setvar dequeue(outQ) outQdata
+crc crcoutpacket $outQdata
+setvar $outsumcrc + $crcoutpacket outsumcrc
+pack 3 1 $outQdata sizeof (outQdata) sizeof (outQdata) + 1 packet
+T_DATA.REQ eventdown userdata $packet
+TIMER_SEND_OUTQ sendoutQtimer   timeevent 1
+setvar $resyncoutQcount - 1 resyncoutQcount
+goto end
+empty:
+eventup S_RESYNCHRONIZE.IND token $tokensafterresync
+end:

@@ -1,0 +1,4 @@
+;параметры:  нет
+pack 5 1 1 1 2 packet
+T_DATA.REQ  eventdown userdata $packet
+setvar 0 insumcrc

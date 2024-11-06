@@ -1,0 +1,12 @@
+;параметры:  нет
+if usersdiscon (($userdiscon == 1) || ($unconduserdiscon == 1))
+if end $isconnecting
+eventup S_P_ABORT.IND
+TIMER_RESET_VARS resetvars  timeevent 1
+goto end
+usersdiscon:
+if abort $unconduserdiscon
+eventup S_RELEASE.CONF
+abort:
+TIMER_RESET_VARS resetvars  timeevent 1
+end:

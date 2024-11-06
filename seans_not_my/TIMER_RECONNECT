@@ -1,0 +1,13 @@
+if stoptryconn  ($tryconncount > 3)
+T_DISCONNECT.REQ eventdown address $addressB
+
+;TIMER_DISCONNECT_DELAY delaydisconconntimer  timeevent 25
+T_CONNECT.REQ eventdown address $addressB
+TIMER_RECONNECT reconntimer timeevent 285
+
+out CurrentSystemName () ": повторная попытка соединения " $tryconncount
+setvar $tryconncount + 1 tryconncount
+goto end
+stoptryconn:
+eventup S_P_ABORT.IND
+end:

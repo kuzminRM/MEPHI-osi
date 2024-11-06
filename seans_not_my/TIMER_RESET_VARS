@@ -1,0 +1,20 @@
+setvar 0 hasDtoken
+setvar 0 hasStoken
+untimer $reconntimer
+untimer $delaydisconconntimer
+setvar 0 insumcrc
+setvar 0 outsumcrc
+setvar 0 reqsumcrc
+clearqueue outQ
+clearqueue inQ
+untimer $sendinQtimer
+untimer $sendoutQtimer
+setvar 0 syncflag
+setvar 0 resyncflag
+setvar 0 sentDtoken
+setvar 0 sentStoken
+setvar 0 unconduserdiscon
+setvar 0 userdiscon
+setvar 0 resetvars
+untimer $normdiscontimer
+setvar 0 isconnecting

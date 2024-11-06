@@ -1,0 +1,3 @@
+;параметры:   userdata (буфер) - данные
+pack 9 1 $userdata sizeof (userdata) sizeof (userdata) + 1 packet
+T_DATA.REQ eventdown userdata $packet

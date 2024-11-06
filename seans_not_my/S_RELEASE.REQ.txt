@@ -1,0 +1,10 @@
+;параметры:  нет
+setvar 1 userdiscon
+if wait (qcount(outQ) > 0)
+pack 12 1 0 1 2 packet
+T_DATA.REQ eventdown userdata $packet
+goto end
+wait:
+TIMER_NORM_DISCONNECT normdiscontimer timeevent 250
+setvar 3 normdiscontimes
+end:

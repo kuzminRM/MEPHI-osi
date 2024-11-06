@@ -1,0 +1,172 @@
+;параметры:  userdata (буфер) - данные
+if end (sizeof (userdata) < 2)
+userdata unbufferit type 1 data sizeof (userdata) - 1
+if paramoffer ($type == 1)
+if paramconfirm  ($type == 2)
+if datapack  ($type == 3)
+if majorsyncreq ($type == 4)
+if majorsyncconf  ($type == 5)
+if syncerror ($type == 6)
+if tokenrequest  ($type == 7)
+if tokengive ($type == 8)
+if expediteddata ($type == 9)
+if resyncreq ($type == 10)
+if resyncresp ($type == 11)
+if normdisconreq ($type == 12)
+if unconddisconreq ($type == 13)
+out "Неизвестный тип пакета"
+goto end
+
+paramoffer:
+eventup S_CONNECT.IND address $addressA quality $qual demand $data
+data unbufferit tokens 1
+if DStoken ($tokens == 1)
+if notoken  ($tokens == 2)
+if Stoken ($tokens == 3)
+if Dtoken ($tokens == 4)
+DStoken:
+setvar 1 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentDtoken
+setvar 1 sentStoken
+goto end
+notoken:
+setvar 0 hasDtoken
+setvar 0 hasStoken
+goto end
+Dtoken:
+setvar 1 hasDtoken
+setvar 0 hasStoken
+setvar 1 sentDtoken
+goto end
+Stoken:
+setvar 0 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentStoken
+goto end
+
+paramconfirm:
+eventup S_CONNECT.CONF quality $data
+untimer $reconntimer
+setvar 0 isconnecting
+goto end
+
+datapack:
+crc crcoutpacket $data
+setvar $insumcrc + $crcoutpacket insumcrc
+queuevalue inQ $data
+goto end
+
+majorsyncreq:
+if end  ($syncflag == 1)
+setvar 1 syncflag
+setvar 0 resyncflag
+data unbufferit reqsumcrc 1
+if syncerror ($reqsumcrc != $insumcrc)
+eventup S_SYNC_MAJOR.IND
+setvar qcount(inQ) upinQcount
+TIMER_SEND_INQ sendinQtimer  timeevent 1
+goto end
+
+majorsyncconf:
+if end ($syncflag == 0)
+setvar 0 outsumcrc
+clearqueue outQ
+eventup S_SYNC_MAJOR.CONF
+setvar 0 syncflag
+goto end
+
+syncerror:
+eventup S_P_EXCEPTION.IND error 3
+goto end
+
+tokenrequest:
+data unbufferit requestedtoken 1
+setvar 0 syncflag
+if end ((($requestedtoken == 1) && ($hasDtoken == 0)) || (($requestedtoken == 2) && ($hasStoken == 0)))
+eventup S_PLEASE_TOKENS.IND token $requestedtoken
+setvar 0 outsumcrc
+clearqueue outQ
+goto end
+
+tokengive:
+data unbufferit giventoken 1
+if end  ((($giventoken == 1) && ($hasDtoken == 1)) || (($giventoken == 2) && ($hasStoken == 1)))
+if giveDtoken  ($giventoken == 1)
+if giveStoken ($giventoken == 2)
+giveDtoken:
+if hadtoken  ($hasDtoken == 1)
+setvar 1 hasDtoken
+goto givetoken
+giveStoken:
+if hadtoken ($hasStoken == 1)
+setvar 1 hasStoken
+goto givetoken
+givetoken:
+eventup S_GIVE_TOKENS.IND token $giventoken
+goto end
+hadtoken:
+eventup S_P_EXCEPTION.IND error 3
+goto end
+
+expediteddata:
+eventup S_EXPEDITED_DATA.IND userdata $data
+goto end
+
+resyncreq:
+if end  ($resyncflag == 1)
+setvar 0 outsumcrc
+data unbufferit tokensafterresync 1
+setvar qcount(outQ) resyncoutQcount
+TIMER_SEND_OUTQ sendoutQtimer   timeevent 1
+setvar 1 resyncflag
+goto end
+
+resyncresp:
+if end ($resyncflag == 0)
+setvar 0 syncflag
+data unbufferit tokensafterresync 1
+eventup S_RESYNCHRONIZE.CONF token $tokensafterresync
+eventup S_SYNC_MAJOR.IND
+setvar qcount(inQ) upinQcount
+TIMER_SEND_INQ sendinQtimer  timeevent 1
+if rrDtoken ($tokensafterresync == 1)
+if rrStoken ($tokensafterresync == 2)
+if rrDStoken ($tokensafterresync == 3)
+if rrnotoken ($tokensafterresync == 4)
+rrDStoken:
+setvar 1 hasDtoken
+setvar 1 hasStoken
+setvar 1 sentDtoken
+setvar 1 sentStoken
+goto end
+rrnotoken:
+setvar 0 hasDtoken
+setvar 0 hasStoken
+setvar 0 sentDtoken
+setvar 0 sentStoken
+goto end
+rrDtoken:
+setvar 1 hasDtoken
+setvar 0 hasStoken
+setvar 1 sentDtoken
+setvar 0 sentStoken
+goto end
+rrStoken:
+setvar 0 hasDtoken
+setvar 1 hasStoken
+setvar 0 sentDtoken
+setvar 1 sentStoken
+goto end
+
+normdisconreq:
+setvar 1 userdiscon
+eventup S_RELEASE.IND
+goto end
+
+unconddisconreq:
+eventup S_U_ABORT.IND
+T_DISCONNECT.REQ eventdown address $addressA
+TIMER_RESET_VARS resetvars  timeevent 1
+goto end
+end:

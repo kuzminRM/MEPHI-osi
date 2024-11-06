@@ -1,0 +1,9 @@
+;параметры:  нет
+if wait (qcount(outQ) > 0)  
+T_DISCONNECT.REQ eventdown address $addressB 
+TIMER_RESET_VARS resetvars timeevent 1
+goto end 
+wait: 
+TIMER_NORM_DISCONNECT normdiscontimer timeevent 250
+setvar 3 normdiscontimes  
+end:
