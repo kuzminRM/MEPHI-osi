@@ -1,0 +1,16 @@
+;параметры:  нет
+out CurrentSystemName() " s sync major req __start"
+
+; проверяем что у нас есть токен синхронизации
+$weHaveSToken == 0 if no_s_token_tag
+
+; отправляем данные с информацией о кол-ве пакетов в которые должно быть в inputDataQueue
+dataToSend pack 5 1 qcount (outputDataQueue) 1 2
+userdata $dataToSend eventdown T_DATA.REQ
+
+return
+
+no_s_token_tag:
+out "we dont have s token"
+raise_err
+return

@@ -1,5 +1,5 @@
 ;параметры:  address (число)
-out CurrentSystemName() "t connect conf __start"
+out CurrentSystemName() " t connect conf __start"
 
 ; мы инициатор
 1 setto weAreInitiator

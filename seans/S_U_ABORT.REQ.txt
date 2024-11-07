@@ -1,5 +1,5 @@
 ;параметры:  нет
-out CurrentSystemName() "s u abort req __start"
+out CurrentSystemName() " s u abort req __start"
 
 ; отправляем данные
 dataToSend pack 3 1 1

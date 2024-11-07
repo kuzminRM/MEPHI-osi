@@ -1,5 +1,5 @@
 ;параметры:  address (число), quality (буфер), demand (буфер)
-out CurrentSystemName() "s connect req __start"
+out CurrentSystemName() " s connect req __start"
 
 address $address eventdown T_CONNECT.REQ
 $address setto addressFromConnectReq

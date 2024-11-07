@@ -1,0 +1,19 @@
+;параметры:   userdata (буфер)
+out CurrentSystemName() " s data req __start"
+
+; проверяем что у нас есть токен данных
+$weHaveDToken == 0 if no_d_token_tag
+
+; кладем данные в очередь
+queue $userdata outputDataQueue
+
+; отправляем данные
+dataToSend pack 4 1 $userdata sizeof(userdata) sizeof(userdata)+1
+userdata $dataToSend eventdown T_DATA.REQ
+
+return
+
+no_d_token_tag:
+out "we dont have d token"
+raise_err
+return

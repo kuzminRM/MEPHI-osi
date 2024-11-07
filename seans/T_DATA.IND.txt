@@ -1,5 +1,5 @@
 ;параметры:  userdata (буфер)
-out CurrentSystemName() "t data ind __start"
+out CurrentSystemName() " t data ind __start"
 
 ; достаем entityNum
 userdata unbufferit entityNum 1 dataReceived sizeof(userdata)-1
@@ -8,6 +8,8 @@ userdata unbufferit entityNum 1 dataReceived sizeof(userdata)-1
 $entityNum == 1 if s_con_req_tag
 $entityNum == 2 if s_con_resp_tag
 $entityNum == 3 if s_u_abort_req_tag
+$entityNum == 4 if s_data_req_tag
+$entityNum == 5 if s_sync_major_req_tag
 
 return
 
@@ -51,13 +53,39 @@ address $addressFromConnectReq quality $qualityFromConnectReq demand $demandFrom
 return
 
 s_con_resp_tag:
+out "received s_con_resp"
 ; отправляем
 quality $dataReceived sendup S_CONNECT.CONF
 return
 
 s_u_abort_req_tag:
+out "received s_u_abort_req"
 ; разединяем транспорт
 address $addressFromConnectReq eventdown T_DISCONNECT.REQ
 ; отправляем индикацию
 sendup S_U_ABORT.IND
+return
+
+s_data_req_tag:
+out "received s_data_req"
+; кладем пакет в очередь входящих
+queue $dataReceived inputDataQueue
+return
+
+s_sync_major_req_tag:
+out "received s_sync_major_req"
+; получаем длину очереди на другой стороне
+dataReceived unbufferit receivedDataQueLength 1
+
+; сравниваем нашу длину очереди данных и их
+qcount (inputDataQueue) != $receivedDataQueLength if data_queue_length_differ_tag
+
+; запускаем процесс передачи данных
+timeevent S_SEND_UP_DATA_TIMER sendDataUpTimer $SEND_UP_DATA_DELAY
+
+return
+
+data_queue_length_differ_tag:
+out "data_queue_length_differ"
+raise_err
 return

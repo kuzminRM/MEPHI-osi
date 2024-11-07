@@ -1,4 +1,4 @@
 ;параметры:  address (число)
-out CurrentSystemName() "t connect ind __start"
+out CurrentSystemName() " t connect ind __start"
 
 address $address eventdown T_CONNECT.RESP

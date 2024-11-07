@@ -1,0 +1,21 @@
+out CurrentSystemName() " s send data up timer __start"
+
+out "data left " qcount (inputDataQueue)
+
+; проверяем наличие элементов в очереди
+qcount (inputDataQueue) == 0 if all_packages_sent_tag
+
+; отправляем один пакет
+userdata dequeue (inputDataQueue) sendup S_DATA.IND
+
+; устанавливаем новый таймер
+0 setto sendDataUpTimer
+timeevent S_SEND_UP_DATA_TIMER sendDataUpTimer $SEND_UP_DATA_DELAY
+
+return
+
+all_packages_sent_tag:
+; сбрасываем таймер и отправялем индикацию главной синхронизации
+0 setto sendDataUpTimer
+sendup S_SYNC_MAJOR.IND
+return
