@@ -1,0 +1,5 @@
+;параметры:  нет
+out CurrentSystemName() " s sync major resp __start"
+; отправляем запрос
+dataToSend pack 7 1 1
+userdata $dataToSend eventdown T_DATA.REQ

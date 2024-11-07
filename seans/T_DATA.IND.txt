@@ -10,6 +10,9 @@ $entityNum == 2 if s_con_resp_tag
 $entityNum == 3 if s_u_abort_req_tag
 $entityNum == 4 if s_data_req_tag
 $entityNum == 5 if s_sync_major_req_tag
+$entityNum == 6 if s_please_tokens_req_tag
+$entityNum == 7 if s_give_tokens_req_tag
+$entityNum == 8 if s_sync_major_resp_tag
 
 return
 
@@ -88,4 +91,42 @@ return
 data_queue_length_differ_tag:
 out "data_queue_length_differ"
 raise_err
+return
+
+s_please_tokens_req_tag:
+out "received s_please_tokens_req"
+; распаковываем данные
+dataReceived unbufferit requestedPleaseToken 1
+; отправляем индикацю
+token $requestedPleaseToken sendup S_PLEASE_TOKENS.IND
+return
+
+s_give_tokens_req_tag:
+out "received s_give_tokens_req"
+; распаковываем данные
+dataReceived unbufferit requestedPleaseToken 1
+; принимаем токен
+$requestedPleaseToken == 1 if d_token_tag
+$requestedPleaseToken == 2 if s_token_tag
+end_if_tag:
+
+; отправляем индикацю
+token $requestedPleaseToken sendup S_GIVE_TOKENS.IND
+return
+
+d_token_tag:
+out "received d token"
+1 setto weHaveDToken
+goto end_if_tag
+return
+
+s_token_tag:
+out "received s token"
+1 setto weHaveSToken
+goto end_if_tag
+return
+
+s_sync_major_resp_tag:
+out "received s_sync_major_resp"
+sendup S_SYNC_MAJOR.CONF
 return

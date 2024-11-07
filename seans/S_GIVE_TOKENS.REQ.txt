@@ -1,0 +1,25 @@
+;параметры:  token (число)
+out CurrentSystemName() " s give tokens req __start"
+
+; обнуляем у себя токен который надо отдать
+$token == 1 if d_token_tag
+$token == 2 if s_token_tag
+end_if_tag:
+
+; отправляем запрос
+dataToSend pack 7 1 $token 1 2
+userdata $dataToSend eventdown T_DATA.REQ
+
+return
+
+d_token_tag:
+out "requested to give d token"
+0 setto weHaveDToken
+goto end_if_tag
+return
+
+s_token_tag:
+out "requested to give s token"
+0 setto weHaveSToken
+goto end_if_tag
+return

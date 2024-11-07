@@ -1,0 +1,8 @@
+;параметры:  token (число)
+out CurrentSystemName() " s plase tokens req __start"
+
+; отправляем запрос
+dataToSend pack 6 1 $token 1 2
+userdata $dataToSend eventdown T_DATA.REQ
+
+return

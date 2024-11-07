@@ -1,10 +1,23 @@
 ; 1 - из T_CONNECT.CONF - данные по S_CONNECT.REQ (буффер длины 4)
 ; 2 - S_CONNECT.RESP
 ; 3 - S_U_ABORT.REQ
+; 4 - S_DATA.REQ
+; 5 - S_SYNC_MAJOR.REQ
+; 6 - S_PLEASE_TOKENS.REQ
+; 7 - S_GIVE_TOKENS.REQ
+; 8 - S_SYNC_MAJOR.RESP
 
 integer declare addressFromConnectReq
 buffer declare qualityFromConnectReq
 buffer declare demandFromConnectReq
+
+queue declare inputDataQueue
+queue declare outputDataQueue
+integer declare receivedDataQueLength
+integer declare sendDataUpTimer
+integer declare SEND_UP_DATA_DELAY
+0 setto sendDataUpTimer
+1 setto SEND_UP_DATA_DELAY
 
 buffer declare dataToSend
 buffer declare dataReceived
@@ -15,3 +28,8 @@ integer declare demandInt
 integer declare weAreInitiator
 integer declare weHaveDToken
 integer declare weHaveSToken
+0 setto weAreInitiator
+0 setto weHaveDToken
+0 setto weHaveSToken
+
+integer declare requestedPleaseToken
