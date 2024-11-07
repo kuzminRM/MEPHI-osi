@@ -1,0 +1,5 @@
+;параметры:   userdata (буфер)
+out CurrentSystemName() " s expedited req __start"
+; отправляем запрос
+dataToSend pack 9 1 $userdata sizeof(userdata) sizeof(userdata )+1
+userdata $dataToSend eventdown T_DATA.REQ

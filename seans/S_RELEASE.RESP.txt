@@ -1,0 +1,7 @@
+;параметры:  нет
+out CurrentSystemName() " s release resp __start"
+; разединяем транспорт
+address $addressFromConnectReq eventdown T_DISCONNECT.REQ
+; отправляем запрос
+dataToSend pack 11 1 1
+userdata $dataToSend eventdown T_DATA.REQ

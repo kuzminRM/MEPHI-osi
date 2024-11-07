@@ -13,6 +13,9 @@ $entityNum == 5 if s_sync_major_req_tag
 $entityNum == 6 if s_please_tokens_req_tag
 $entityNum == 7 if s_give_tokens_req_tag
 $entityNum == 8 if s_sync_major_resp_tag
+$entityNum == 9 if s_expedited_data_req_tag
+$entityNum == 10 if s_release_req_tag
+$entityNum == 11 if s_release_resp_tag
 
 return
 
@@ -73,6 +76,7 @@ s_data_req_tag:
 out "received s_data_req"
 ; кладем пакет в очередь входящих
 queue $dataReceived inputDataQueue
+out "new length = " qcount (inputDataQueue)
 return
 
 s_sync_major_req_tag:
@@ -89,7 +93,7 @@ timeevent S_SEND_UP_DATA_TIMER sendDataUpTimer $SEND_UP_DATA_DELAY
 return
 
 data_queue_length_differ_tag:
-out "data_queue_length_differ"
+out "data_queue_length_differ our = " qcount (inputDataQueue) " their = " $receivedDataQueLength
 raise_err
 return
 
@@ -128,5 +132,26 @@ return
 
 s_sync_major_resp_tag:
 out "received s_sync_major_resp"
+; обнуляем очередь на выход
+clearqueue outputDataQueue
+; отправляем подтверждение
 sendup S_SYNC_MAJOR.CONF
+return
+
+s_expedited_data_req_tag:
+out "received s_expedited_data_req"
+; отправляем даннные сразу, как есть
+userdata $dataReceived sendup S_EXPEDITED_DATA.IND
+return
+
+s_release_req_tag:
+out "received s_release_req"
+; отправялем индикацию
+sendup S_RELEASE.IND
+return
+
+s_release_resp_tag:
+out "received s_release_resp"
+; отправялем индикацию
+sendup S_RELEASE.CONF
 return

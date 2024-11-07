@@ -1,5 +1,5 @@
 ;параметры:  нет
-out CurrentSystemName() " s sync major resp __start"
+out CurrentSystemName() " s release req __start"
 ; отправляем запрос
-dataToSend pack 8 1 1
+dataToSend pack 10 1 1
 userdata $dataToSend eventdown T_DATA.REQ

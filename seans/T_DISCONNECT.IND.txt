@@ -1,3 +1,4 @@
 ;параметры:  нет
 out CurrentSystemName() " t disconnect ind __start"
 ; вызывается после S_U_ABORT.REQ
+; вызывается после S_RELEASE.RESP
