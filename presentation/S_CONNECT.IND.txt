@@ -1,0 +1,4 @@
+;параметры:  address (число), quality (буфер), demand (буфер)
+out CurrentSystemName() " s connect ind __start"
+
+address $address quality $quality demand $demand sendup P_CONNECT.IND

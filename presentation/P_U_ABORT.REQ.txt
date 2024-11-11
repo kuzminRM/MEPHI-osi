@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p u abort req __start"
+
+eventdown S_U_ABORT.REQ

@@ -1,0 +1,8 @@
+;параметры:  quality (буфер)
+out CurrentSystemName() " s connect conf __start"
+
+$quality setto savedQuality
+
+; запрашиваем contextFromConnectResp
+dataToSend pack 1 1 1
+userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ

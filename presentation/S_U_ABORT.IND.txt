@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " s u abort ind __start"
+
+sendup P_U_ABORT.IND

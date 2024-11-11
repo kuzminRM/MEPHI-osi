@@ -1,0 +1,5 @@
+;параметры:  address (число), quality (буфер), demand (буфер), context (буфер)
+out CurrentSystemName() " p connect req __start"
+
+address $address quality $quality demand  $demand eventdown S_CONNECT.REQ
+$context setto contextFromConnectReq

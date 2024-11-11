@@ -1,0 +1,5 @@
+;параметры:  address (число), quality (буфер), context (буфер)
+out CurrentSystemName() " p connect resp __start"
+
+address $address quality $quality eventdown S_CONNECT.RESP
+$context setto contextFromConnectResp

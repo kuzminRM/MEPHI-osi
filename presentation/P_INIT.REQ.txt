@@ -1,0 +1,40 @@
+; эти entityNum касаются только EXPEDITED_DATA
+; 1 - запросить context с другой стороны
+; 2 - отправить context на другую сторону
+; 3 - отправить синтаксис передачи на другую сторону
+; 4 - оригинальные данные
+
+integer declare entityNum
+buffer declare dataReceived
+buffer declare dataToSend
+buffer declare temp
+
+buffer declare contextFromConnectReq
+buffer declare contextFromConnectResp
+buffer declare contextForConnectConf
+buffer declare savedQuality
+string declare ourOpenSymbol
+string declare ourCloseSymbol
+string declare theirOpenSymbol
+string declare theirCloseSymbol
+integer declare isOurSyntaxLenEnabled
+integer declare isOurSyntaxEndSymbolEnabled
+integer declare isTheirSyntaxLenEnabled
+integer declare isTheirSyntaxEndSymbolEnabled
+integer declare syntaxNumTemp
+integer declare selectedSyntax
+0 setto isOurSyntaxLenEnabled
+0 setto isOurSyntaxEndSymbolEnabled
+0 setto isTheirSyntaxLenEnabled
+0 setto isTheirSyntaxEndSymbolEnabled
+
+integer declare dataType
+string declare strData
+string declare unifiedOpenSymbol
+string declare unifiedCloseSymbol
+string declare resultStrData
+string declare tempChar
+integer declare currentPos
+integer declare strLength
+"(" setto unifiedOpenSymbol
+")" setto unifiedCloseSymbol

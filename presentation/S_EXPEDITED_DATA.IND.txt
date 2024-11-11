@@ -1,0 +1,101 @@
+;параметры:  userdata (буфер)
+out CurrentSystemName() " s expedited data ind __start"
+
+; достаем entityNum
+userdata unbufferit entityNum 1 dataReceived sizeof(userdata)-1
+
+; определяем какой запрос пришел
+$entityNum == 1 if context_req_tag
+$entityNum == 2 if context_resp_tag
+$entityNum == 3 if context_from_conf_tag
+$entityNum == 4 if original_data_tag
+
+return
+
+context_req_tag:
+out "requested context"
+; отправляем сохраненный contextFromConnectResp
+dataToSend pack 2 1 $contextFromConnectResp sizeof(contextFromConnectResp) sizeof(contextFromConnectResp)+1
+userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
+return
+
+context_resp_tag:
+out "context delivered"
+$dataReceived  setto contextFromConnectResp
+
+; получаем какие синтаксисы передачи данных разрешены у нас
+sizeof(contextFromConnectReq) != 4 if skip_if_context_11_tag
+1 setto isOurSyntaxLenEnabled
+1 setto isOurSyntaxEndSymbolEnabled
+skip_if_context_11_tag:
+sizeof(contextFromConnectReq) != 3 if skip_if_context_12_tag
+contextFromConnectReq unbufferit temp 2 syntaxNumTemp 1
+$syntaxNumTemp == 1 if skip_if_context_13_tag
+1 setto isOurSyntaxLenEnabled
+0 setto isOurSyntaxEndSymbolEnabled
+skip_if_context_13_tag:
+$syntaxNumTemp == 2 if skip_if_context_14_tag
+0 setto isOurSyntaxLenEnabled
+1 setto isOurSyntaxEndSymbolEnabled
+skip_if_context_14_tag:
+skip_if_context_12_tag:
+out "our Len = " $isOurSyntaxLenEnabled " EndSymb " $isOurSyntaxEndSymbolEnabled
+
+; получаем какие синтаксисы передачи данных разрешены у них
+sizeof(contextFromConnectResp) != 4 if skip_if_context_21_tag
+1 setto isTheirSyntaxLenEnabled
+1 setto isTheirSyntaxEndSymbolEnabled
+skip_if_context_21_tag:
+sizeof(contextFromConnectResp) != 3 if skip_if_context_22_tag
+contextFromConnectResp unbufferit temp 2 syntaxNumTemp 1
+$syntaxNumTemp == 1 if skip_if_context_23_tag
+1 setto isTheirSyntaxLenEnabled
+0 setto isTheirSyntaxEndSymbolEnabled
+skip_if_context_23_tag:
+$syntaxNumTemp == 2 if skip_if_context_24_tag
+0 setto isTheirSyntaxLenEnabled
+1 setto isTheirSyntaxEndSymbolEnabled
+skip_if_context_24_tag:
+skip_if_context_22_tag:
+out "their Len = " $isTheirSyntaxLenEnabled " EndSymb " $isTheirSyntaxEndSymbolEnabled
+
+; принимаеи решение о том какое кодирование использовать
+$isOurSyntaxLenEnabled == 1 && $isTheirSyntaxLenEnabled == 1 if case_context_31_tag
+$isOurSyntaxEndSymbolEnabled == 1 && $isTheirSyntaxEndSymbolEnabled == 1 if case_context_32_tag
+out "err could not choose syntax"
+raise_err
+case_context_31_tag:
+1 setto selectedSyntax
+goto end_case_context_33_tag
+case_context_32_tag:
+2 setto selectedSyntax
+goto end_case_context_33_tag
+end_case_context_33_tag:
+out "using syntax " $selectedSyntax
+
+; запоминаем открывающие/закрывающие символы
+contextFromConnectReq unbufferit ourOpenSymbol 1 ourCloseSymbol 1
+contextFromConnectResp unbufferit theirOpenSymbol 1 theirCloseSymbol 1
+
+; отправляем принятое решение на другое устройство
+contextForConnectConf pack $ourOpenSymbol 1 $ourCloseSymbol 1 $selectedSyntax 1 3
+dataToSend pack 3 1 $contextForConnectConf sizeof(contextFromConnectResp) sizeof(contextFromConnectResp)+1
+userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
+
+; завершаем этап соединения
+quality $savedQuality context $contextForConnectConf sendup P_CONNECT.CONF
+return
+
+context_from_conf_tag:
+out "received context from conf"
+; распаковываем их значения и выбранный синтаксис
+$dataReceived setto contextForConnectConf
+contextForConnectConf unbufferit theirOpenSymbol 1 theirCloseSymbol 1 selectedSyntax 1
+; распаковываем свои значения
+contextFromConnectResp unbufferit ourOpenSymbol 1 ourCloseSymbol 1
+return
+
+original_data_tag:
+out "received original data"
+
+return
