@@ -1,0 +1,76 @@
+;параметры:  userdata (буфер)
+out CurrentSystemName() " p expedited data req __start"
+
+
+$userdata setto dataReceived
+
+$selectedSyntax == 1 if len_tag
+$selectedSyntax == 2 if end_symb_tag
+
+return
+
+len_tag:
+out "encode len | reveresed to encode end symbol"
+goto end_symb_tag
+return
+
+end_symb_tag:
+out "encode end symbol"
+dataReceived unbufferit dataType 1
+out "dataType = " $dataType
+$dataType == 1 if encode_string_tag
+$dataType == 2 if send_as_is_tag
+$dataType == 3 if send_as_is_tag
+$dataType == 4 if send_as_is_tag
+return
+
+send_as_is_tag:
+out "send as is"
+; отправляем данные с entityNum 4
+dataToSend pack 4 1 $dataReceived sizeof(dataReceived) sizeof(dataReceived)+1
+userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
+return
+
+encode_string_tag:
+dataReceived unbufferit dataType 1 strData sizeof(dataReceived)-1
+
+; инициализируем переменные для результата
+"" setto resultStrData
+1 setto currentPos
+sizeof(strData) setto strLength
+
+replace_loop_tag:
+; пока не достигли конца строки
+$currentPos > $strLength if end_replace_tag
+
+; копируем один символ из исходной строки
+copy (strData, $currentPos, 1) setto tempChar
+
+; проверяем, является ли символ открывающим / закрывающим
+$tempChar == $ourOpenSymbol if replace_open_tag
+$tempChar == $ourCloseSymbol if replace_close_tag
+
+; если символ не нуждается в замене, добавляем его к результату
+$resultStrData + $tempChar setto resultStrData
+goto continue_replace_tag
+
+replace_open_tag:
+$resultStrData + $unifiedOpenSymbol setto resultStrData
+goto continue_replace_tag
+
+replace_close_tag:
+$resultStrData + $unifiedCloseSymbol setto resultStrData
+goto continue_replace_tag
+
+continue_replace_tag:
+; увеличиваем текущую позицию
+$currentPos + 1 setto currentPos
+goto replace_loop_tag
+
+end_replace_tag:
+
+out "Результат после замены : " $resultStrData
+; отправляем данные с entityNum 4
+dataToSend pack 4 1 $dataType 1 $resultStrData sizeof(dataToSend) sizeof(dataToSend)+2
+userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
+return

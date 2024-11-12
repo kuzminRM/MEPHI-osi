@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " s release ind __start"
+
+sendup P_RELEASE.IND

@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " s release conf __start"
+
+sendup P_RELEASE.CONF

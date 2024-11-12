@@ -1,0 +1,4 @@
+;параметры:  token (число)
+out CurrentSystemName() " s give tokens ind __start"
+
+token $token sendup P_GIVE_TOKENS.IND

@@ -12,5 +12,6 @@ return
 
 no_s_token_tag:
 out "we dont have s token"
-raise_err
+; raise_err
+error 2 sendup S_P_EXCEPTION.IND
 return

@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p sync major req __start"
+
+eventdown S_SYNC_MAJOR.REQ

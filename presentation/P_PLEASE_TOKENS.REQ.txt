@@ -1,0 +1,4 @@
+;параметры:  token (число)
+out CurrentSystemName() " p please tokens req __start"
+
+token $token eventdown S_PLEASE_TOKENS.REQ

@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " s sync major ind __start"
+
+sendup P_SYNC_MAJOR.IND

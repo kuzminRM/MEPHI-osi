@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p release resp __start"
+
+eventdown S_RELEASE.RESP

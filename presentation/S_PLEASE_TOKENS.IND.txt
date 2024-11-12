@@ -1,0 +1,4 @@
+;параметры:  token (число)
+out CurrentSystemName() " s please tokens ind __start"
+
+token $token sendup P_PLEASE_TOKENS.IND

@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p release req __start"
+
+eventdown S_RELEASE.REQ

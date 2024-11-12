@@ -1,0 +1,4 @@
+;параметры:  error (число)
+out CurrentSystemName() " s p exception ind __start"
+
+error $error sendup P_P_EXCEPTION.IND
