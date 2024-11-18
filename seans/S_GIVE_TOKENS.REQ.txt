@@ -14,12 +14,26 @@ return
 
 d_token_tag:
 out "requested to give d token"
+$weHaveDToken == 0 if we_dont_have_d_token_tag
 0 setto weHaveDToken
 goto end_if_tag
 return
 
 s_token_tag:
 out "requested to give s token"
+$weHaveSToken == 0 if we_dont_have_s_token_tag
 0 setto weHaveSToken
 goto end_if_tag
+return
+
+we_dont_have_d_token_tag:
+out "we dont have d token"
+; raise_err
+error 1 sendup S_P_EXCEPTION.IND
+return
+
+we_dont_have_s_token_tag:
+out "we dont have s token"
+; raise_err
+error 2 sendup S_P_EXCEPTION.IND
 return
