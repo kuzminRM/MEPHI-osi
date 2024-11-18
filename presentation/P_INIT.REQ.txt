@@ -28,7 +28,25 @@ integer declare selectedSyntax
 0 setto isTheirSyntaxLenEnabled
 0 setto isTheirSyntaxEndSymbolEnabled
 
+buffer declare mainPaylod
 integer declare dataType
+string declare tempStr
+string declare endSymbol
+integer declare endSymbolLen
+"#" setto endSymbol
+sizeof(endSymbol) setto endSymbolLen
+
+integer declare totalLen
+string declare returnTo
+string declare sound
+string declare action
+string declare colour
+string declare smell
+
+integer declare structureDType
+integer declare structureDLen
+
+; по идее все что ниже не используется (но я пожалуй воспользуюсь принципом - работает не трогай)
 string declare strData
 string declare unifiedOpenSymbol
 string declare unifiedCloseSymbol

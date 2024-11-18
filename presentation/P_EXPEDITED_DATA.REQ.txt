@@ -1,7 +1,6 @@
 ;параметры:  userdata (буфер)
 out CurrentSystemName() " p expedited data req __start"
 
-
 $userdata setto dataReceived
 
 $selectedSyntax == 1 if len_tag
@@ -9,68 +8,105 @@ $selectedSyntax == 2 if end_symb_tag
 
 return
 
+; #######################
+; ##         len encoding          ##
+; #######################
 len_tag:
-out "encode len | reveresed to encode end symbol"
-goto end_symb_tag
+out "encode len"
+dataReceived unbufferit dataType 1 mainPaylod sizeof(dataReceived)-1
+out "dataType = " $dataType
+$dataType == 1 if len_structure_tag
+$dataType == 2 if len_int_and_str_tag
+$dataType == 3 if len_int_and_str_tag
+$dataType == 4 if len_structure_tag
 return
 
+len_int_and_str_tag:
+out "len_int_and_str_tag"
+
+; пакуем в формате : тип данных / размер / данные
+dataToSend pack $dataType 1 sizeof(mainPaylod) 1 $mainPaylod sizeof(mainPaylod) sizeof(mainPaylod)+2
+
+goto send_data_tag
+return
+
+len_structure_tag:
+out "len_structure_tag"
+
+; распаковываем структуру
+"len" setto returnTo
+goto unpak_structure_tag
+len_structure_return_tag:
+
+; кодируем структуру
+10 + sizeof(sound) + sizeof(action) + sizeof(colour) + sizeof(smell) setto totalLen
+dataToSend pack $dataType 1 $totalLen-2 1 10 1 sizeof(sound) 1 $sound sizeof(sound) 20 1 sizeof(action) 1 $action sizeof(action) 30 1 sizeof(colour) 1 $colour sizeof(colour) 40 1 sizeof(smell) 1 $smell sizeof(smell) $totalLen
+
+goto send_data_tag
+return
+
+; #######################
+; ## end symbol encoding ##
+; #######################
 end_symb_tag:
 out "encode end symbol"
-dataReceived unbufferit dataType 1
+
+dataReceived unbufferit dataType 1 mainPaylod sizeof(dataReceived)-1
 out "dataType = " $dataType
-$dataType == 1 if encode_string_tag
-$dataType == 2 if send_as_is_tag
-$dataType == 3 if send_as_is_tag
-$dataType == 4 if send_as_is_tag
+$dataType == 1 if end_structure_tag
+$dataType == 2 if end_int_and_str_tag
+$dataType == 3 if end_int_and_str_tag
+$dataType == 4 if end_structure_tag
+
 return
 
-send_as_is_tag:
-out "send as is"
-; отправляем данные с entityNum 4
-dataToSend pack 4 1 $dataReceived sizeof(dataReceived) sizeof(dataReceived)+1
-userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
+end_int_and_str_tag:
+out "end_int_and_str_tag"
+
+; пакуем в формате : тип данных / данные / символ конца
+dataToSend pack $dataType 1 $mainPaylod sizeof(mainPaylod) $endSymbol 1 sizeof(mainPaylod)+2
+
+goto send_data_tag
 return
 
-encode_string_tag:
-dataReceived unbufferit dataType 1 strData sizeof(dataReceived)-1
+end_structure_tag:
+out "end_structure_tag"
 
-; инициализируем переменные для результата
-"" setto resultStrData
-1 setto currentPos
-sizeof(strData) setto strLength
+; распаковываем структуру
+"end" setto returnTo
+goto unpak_structure_tag
+end_structure_return_tag:
 
-replace_loop_tag:
-; пока не достигли конца строки
-$currentPos > $strLength if end_replace_tag
+; кодируем структуру
+10 + sizeof(sound) + sizeof(action) + sizeof(colour) + sizeof(smell) setto totalLen
+dataToSend pack $dataType 1 10 1 $sound sizeof(sound) $endSymbol 1 20 1 $action sizeof(action) $endSymbol 1 30 1 $colour sizeof(colour) $endSymbol 1 40 1 $smell sizeof(smell) $endSymbol 1 $endSymbol 1 $totalLen
 
-; копируем один символ из исходной строки
-copy (strData, $currentPos, 1) setto tempChar
+goto send_data_tag
+return
 
-; проверяем, является ли символ открывающим / закрывающим
-$tempChar == $ourOpenSymbol if replace_open_tag
-$tempChar == $ourCloseSymbol if replace_close_tag
+; #######################
+; ##         common part         ##
+; #######################
+unpak_structure_tag:
+; получаем структуру
+mainPaylod unbufferit tempStr sizeof(mainPaylod )
 
-; если символ не нуждается в замене, добавляем его к результату
-$resultStrData + $tempChar setto resultStrData
-goto continue_replace_tag
+; вырезаем кусочки данных : звук, действие, цвет, запах
+copy (tempStr, 3, sizeof(tempStr)-2) setto tempStr
+copy (tempStr, 1, pos($ourCloseSymbol, tempStr)-1) setto sound
+copy (tempStr, sizeof(sound)+3, sizeof(tempStr)-sizeof(sound)-2) setto tempStr
+copy (tempStr, 1, pos($ourCloseSymbol, tempStr)-1) setto action
+copy (tempStr, sizeof(action)+3, sizeof(tempStr)-sizeof(action)-2) setto tempStr
+copy (tempStr, 1, pos($ourCloseSymbol, tempStr)-1) setto colour
+copy (tempStr, sizeof(colour)+3, sizeof(tempStr)-sizeof(colour)-2) setto tempStr
+copy (tempStr, 1, pos($ourCloseSymbol, tempStr)-1) setto smell
 
-replace_open_tag:
-$resultStrData + $unifiedOpenSymbol setto resultStrData
-goto continue_replace_tag
+; возвращаемся назад
+$returnTo == "len" if len_structure_return_tag
+$returnTo == "end" if end_structure_return_tag
+return
 
-replace_close_tag:
-$resultStrData + $unifiedCloseSymbol setto resultStrData
-goto continue_replace_tag
-
-continue_replace_tag:
-; увеличиваем текущую позицию
-$currentPos + 1 setto currentPos
-goto replace_loop_tag
-
-end_replace_tag:
-
-out "Результат после замены : " $resultStrData
-; отправляем данные с entityNum 4
-dataToSend pack 4 1 $dataType 1 $resultStrData sizeof(dataToSend) sizeof(dataToSend)+2
+send_data_tag:
+dataToSend pack 4 1 $dataToSend sizeof(dataToSend) sizeof(dataToSend)+1
 userdata $dataToSend eventdown S_EXPEDITED_DATA.REQ
 return
