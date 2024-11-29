@@ -1,0 +1,4 @@
+;параметры: apcon (строка)
+untimer $release_ind_timer 
+0 varset release_ind_timer
+generateup A_TERMINATE.IND

@@ -1,0 +1,2 @@
+;параметры:  нет
+A_RELEASE.IND 0 apcon "DT" timeevent release_ind_timer

@@ -1,0 +1,5 @@
+;параметры:  address (число), quality (буфер), demand (буфер)
+$address varset a_address
+locguide($address) varset a_namei
+sizeof(a_namei)+1 $address 1 $a_namei sizeof(a_namei) bufferit a_namei_buf
+A_ASSOCIATE.IND 1 namei $a_namei_buf quality $quality demand $demand timeevent associate_ind_timer

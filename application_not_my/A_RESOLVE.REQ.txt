@@ -1,0 +1,63 @@
+;параметры: name (строка)
+untimer $resolve_req_timer
+locguide($name) varset data
+unpack resolve_type 1 a_address 1 time_start 1 time_stop 1 change_from 1 change_to 1 data
+if $resolve_type == 3 not_found
+
+;goto hack
+
+goto type
+
+hack:
+$hack_address varset a_address
+goto type_0
+
+
+type:
+if $resolve_type == 0 type_0
+if $resolve_type == 1 type_1
+if $resolve_type == 2 type_2
+if $resolve_type == 3 type_3
+if $resolve_type == 4 type_4
+goto end
+
+type_0:
+"DT" varset current_apcon
+$current_apcon varset req_apcon
+sizeof(total_name) + 1 $a_address 1 $total_name sizeof(total_name) bufferit current_buffer
+sizeof(req_name) + 1 $req_address 1 $req_name sizeof(req_name) bufferit current_buffer2
+sizeof(current_buffer) + sizeof(current_buffer2) + sizeof(current_quality) + sizeof(current_demand) + sizeof(current_context) + sizeof(current_apcon) + 3 sizeof(current_buffer) 1 sizeof(current_buffer2) 1 sizeof(current_context) 1 $current_buffer sizeof(current_buffer) $current_buffer2 sizeof(current_buffer2) $current_quality sizeof(current_quality) $current_demand sizeof(current_demand) $current_context sizeof(current_context) $current_apcon sizeof(current_apcon) bufferit current_buffer
+A_RESOLVE.IND  1 address $current_buffer  timeevent current_timer
+goto end
+
+type_1:
+A_RESOLVE.REQ $current_t1+100 name $total_name  timeevent current_timer
+goto end
+
+type_2:
+A_RESOLVE.REQ $current_t1+100  name $total_name timeevent current_timer
+goto end
+
+
+type_4:
+out "NEED TO FIX NAME"
+goto end
+
+
+not_found:
+locguide("Guide") varset data
+out "NOT FOUND"
+
+;sizeof(a_namer)+1 3 1 $a_namer sizeof(a_namer) bufferit package_buffer
+;P_DATA.REQ generatedown userdata $package_buffer
+;out "gd P_DATA.REQ " $a_address
+;A_SYNC_MAJOR_TIMER 10 timeevent sync_timer
+
+unpack resolve_type 1 a_address 1 time_start 1 time_stop 1 change_from 1 change_to 1 data
+1 1 1 bufferit a_demand
+6 "Guide" 5 $a_address 1 bufferit a_namer_buf
+sizeof(a_namei)+1 $a_namei sizeof(a_namei) locguide($a_namei) 1 bufferit a_namei_buf
+A_ASSOCIATE.REQ 0 namer $a_namer_buf namei $a_namei_buf quality $a_quality demand $a_demand context $a_context apcon "GS" timeevent associate_req_timer
+
+goto end
+end:

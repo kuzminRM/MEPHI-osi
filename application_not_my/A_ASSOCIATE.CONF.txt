@@ -1,0 +1,17 @@
+;параметры:  address (число), quality (буфер), demand (буфер), context (буфер)
+out "A_ASSOCIATE.CONF"
+untimer $associate_conf_timer
+if $a_apcon == "GS" gs
+if $a_apcon == "DT" dt
+
+goto done
+gs:
+sizeof(a_namer)+1 3 1 $a_namer sizeof(a_namer) bufferit package_buffer
+P_DATA.REQ generatedown userdata $package_buffer
+out "gd P_DATA.REQ " $a_address
+A_SYNC_MAJOR_TIMER 0 timeevent sync_timer
+goto done
+dt:
+context $context quality $quality generateup A_TRANSFER_INIT.CONF
+goto done
+done:

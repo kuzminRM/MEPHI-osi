@@ -1,0 +1,3 @@
+;параметры: namei (буфер), context (буфер), quality (буфер), apcon (строка)
+untimer $associate_resp_timer
+P_CONNECT.RESP generatedown address $a_address quality $quality context $context

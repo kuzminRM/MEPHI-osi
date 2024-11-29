@@ -1,0 +1,2 @@
+;параметры:  quality (буфер), context (буфер)
+A_ASSOCIATE.CONF 0 context $a_context quality $a_quality demand $a_demand timeevent associate_conf_timer

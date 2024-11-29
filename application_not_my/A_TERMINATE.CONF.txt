@@ -1,0 +1,2 @@
+untimer $terminate_conf_timer
+0 varset terminate_conf_timer

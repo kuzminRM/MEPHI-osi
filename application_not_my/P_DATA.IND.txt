@@ -1,0 +1,36 @@
+;параметры:  userdata (буфер)
+out "P_DATA.IND " $a_apcon
+if $a_apcon == "GS" gs
+if  $a_apcon == "TD" td
+"TD" varset a_apcon
+goto td
+goto done
+td:
+userdata $userdata generateup A_DATA.IND
+goto done
+gs:
+
+unpack package_type 1 resolve_type 1 a_address 1 time_start 1 time_stop 1 change_from 1 change_to 1 userdata
+out "RESOLVE TYPE " $package_type " " $resolve_type " " $a_address " " $time_start " " $time_stop " " $change_from " " $change_to
+if $resolve_type == 2 wait
+if $resolve_type == 1 wait
+if $resolve_type == 3 ultra_wait
+$a_address varset hack_address
+A_RELEASE.REQ 0 apcon "GS" timeevent release_req_timer
+goto done
+
+wait:
+out "WAIT"
+A_RESOLVE.REQ $time_start +100 name "SystemB" timeevent release_req_timer
+goto done
+
+ultra_wait:
+out "ULTRA WAIT"
+$hack_address varset  a_address
+A_RELEASE.REQ 0 apcon "GS" timeevent release_req_timer
+goto done
+A_RESOLVE.REQ 1000 name "SystemB" timeevent release_req_timer
+goto done
+
+done:
+

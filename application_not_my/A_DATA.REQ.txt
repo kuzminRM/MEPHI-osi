@@ -1,0 +1,10 @@
+;параметры: userdata(буфер)
+out "A_DATA.REQ"
+queue package_queue $userdata
+if $asked_for_token == 1 done
+; else - ask for token
+out "PLEASE_TOKENS.REQ"
+P_PLEASE_TOKENS.REQ generatedown token 1
+1 varset asked_for_token
+goto done
+done:

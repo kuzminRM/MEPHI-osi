@@ -1,0 +1,2 @@
+;параметры:  нет
+A_RELEASE.CONF 0 apcon $a_apcon timeevent release_conf_timer

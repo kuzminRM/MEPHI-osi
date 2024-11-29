@@ -1,0 +1,5 @@
+;параметры: apcon (строка)
+untimer $release_resp_timer
+0 varset release_resp_timer
+P_RELEASE.RESP generatedown
+

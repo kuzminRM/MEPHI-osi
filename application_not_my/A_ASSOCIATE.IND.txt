@@ -1,0 +1,2 @@
+untimer $associate_ind_timer
+namei $a_namei quality $quality generateup A_TRANSFER_INIT.IND

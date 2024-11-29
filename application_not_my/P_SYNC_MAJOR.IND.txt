@@ -1,0 +1,3 @@
+;параметры:  нет
+;параметры:  нет
+P_SYNC_MAJOR.RESP generatedown

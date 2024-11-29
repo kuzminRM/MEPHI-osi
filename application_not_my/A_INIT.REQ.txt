@@ -1,0 +1,60 @@
+declare a_namer string
+declare a_namei string
+declare a_namer_buf buffer
+declare a_namei_buf buffer
+declare a_context buffer
+declare a_quality buffer
+declare a_demand buffer
+declare a_apcon string
+declare resolve_type integer
+declare req_t1 integer
+declare req_t2 integer
+declare req_s1 string
+declare req_s2 string
+declare req_apcon string
+declare res_name string
+declare res_id integer
+declare package_type integer
+declare data buffer
+declare a_address integer
+declare a_address_buf buffer
+declare time_start integer
+declare time_stop integer
+declare release_req_timer integer
+declare release_ind_timer integer
+declare release_resp_timer integer
+declare release_conf_timer integer
+declare terminate_req_timer integer
+declare size integer
+declare size2 integer
+declare size3 integer
+declare type integer
+declare dict_flag integer
+declare req_name string
+declare terminate_resp_timer integer
+declare change_from string
+declare change_to string
+declare package_buffer buffer
+declare package_queue queue
+declare asked_for_token integer
+
+declare resolve_req_timer integer
+declare resolve_ind_timer integer
+declare associate_req_timer integer
+declare associate_ind_timer integer
+declare associate_resp_timer integer
+declare associate_conf_timer integer
+
+declare sync_timer integer
+
+declare hack_address integer
+declare current_demand buffer
+1 1 1 bufferit current_demand
+
+declare dict_name string
+declare dict_buffer buffer
+
+
+declare current_queue queue
+
+0 varset hack_address

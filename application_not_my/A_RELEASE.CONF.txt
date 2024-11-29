@@ -1,0 +1,15 @@
+;параметры: apcon (строка)
+untimer $release_conf_timer
+if $apcon == "GS" gs
+if $apcon == "DT" dt
+
+goto done
+gs:
+4 $resolve_type 1 $a_address 1 $change_from 1 $change_to 1 bufferit a_address_buf
+A_RESOLVE.IND 0 address $a_address_buf timeevent resolve_ind_timer
+goto done
+dt:
+address $a_address generateup A_TERMINATE.CONF
+goto done
+done:
+

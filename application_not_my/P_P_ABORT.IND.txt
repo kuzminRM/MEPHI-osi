@@ -1,0 +1,2 @@
+;параметры:  нет
+apcon $a_apcon generateup A_P_ABORT.IND

@@ -1,0 +1,4 @@
+;параметры: namer (буфер), namei (буфер), quality (буфер), demand (буфер), context (буфер), apcon (строка)
+untimer $associate_req_timer
+$apcon varset a_apcon
+P_CONNECT.REQ generatedown address $a_address quality $quality demand $demand context $context

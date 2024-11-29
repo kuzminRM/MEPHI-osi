@@ -1,0 +1,6 @@
+;параметры: apcon (строка)
+untimer $release_req_timer
+0 varset release_req_timer
+$apcon varset a_apcon
+P_RELEASE.REQ generatedown
+

@@ -1,0 +1,6 @@
+untimer $resolve_ind_timer
+0 varset resolve_ind_timer
+unpack resolve_type 1 a_address 1 change_from 1 change_to 1 address
+sizeof(a_namer)+1 $a_namer sizeof(a_namer) $a_address 1 bufferit a_namer_buf
+out "A_RESOLVE.IND " $resolve_type " " $a_address
+A_ASSOCIATE.REQ 0 namer $a_namer namei $a_namei_buf quality $a_quality demand $a_demand context $a_context apcon "DT" timeevent associate_req_timer

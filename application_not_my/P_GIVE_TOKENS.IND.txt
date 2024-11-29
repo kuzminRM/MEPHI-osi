@@ -1,0 +1,17 @@
+;параметры:  token (число)
+out "P_GIVE_TOKENS.IND"
+if $token == 1 loop
+P_SYNC_MAJOR.REQ generatedown
+goto done
+loop:
+if qcount(package_queue) == 0 break
+P_DATA.REQ generatedown userdata dequeue(package_queue)
+goto loop
+
+break:
+0 varset asked_for_token
+P_PLEASE_TOKENS.REQ generatedown token 2
+goto done
+
+done:
+

@@ -1,0 +1,23 @@
+;параметры:  error (число)
+;параметры:  error (число)
+if ($error == 1) need_data_marker
+if ($error == 2) need_sync_marker
+if ($error == 3) need_resync
+out "p_pe.i : unexpected error"
+goto end
+
+need_data_marker:
+P_GIVE_TOKENS.REQ generatedown token 1
+goto end
+
+need_sync_marker:
+P_GIVE_TOKENS.REQ generatedown token 2
+goto end
+
+need_resync:
+P_RESYNCHRONIZE.REQ generatedown token 4
+goto end
+
+
+end:
+

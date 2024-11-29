@@ -1,0 +1,6 @@
+;параметры: namer (строка), namei (строка), context (буфер), quality (буфер)
+$namer varset a_namer
+$namei varset a_namei
+$context varset a_context
+$quality varset a_quality
+A_RESOLVE.REQ 0 name $namer timeevent resolve_req_timer

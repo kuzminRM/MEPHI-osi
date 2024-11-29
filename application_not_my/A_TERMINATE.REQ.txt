@@ -1,0 +1,2 @@
+;параметры: нет
+A_RELEASE.REQ 0 apcon $a_apcon timeevent release_req_timer

@@ -1,0 +1,2 @@
+;параметры:  token (число)
+P_GIVE_TOKENS.REQ generatedown token $token

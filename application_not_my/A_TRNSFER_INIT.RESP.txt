@@ -1,0 +1,2 @@
+;параметры: namei (строка), context (буфер), quality (буфер)
+A_ASSOCIATE.RESP 0 namei $a_namei_buf context $context quality $quality apcon "DT" timeevent associate_resp_timer
