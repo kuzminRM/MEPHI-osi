@@ -1,0 +1,8 @@
+;параметры: apcon (строка)
+out CurrentSystemName() " a release req __start"
+
+0 setto releaseReqTimer
+
+; хз может это и не надо
+$apcon setto apconFromAssociateReq
+eventdown P_RELEASE.REQ

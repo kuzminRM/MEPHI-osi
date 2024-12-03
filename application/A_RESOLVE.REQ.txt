@@ -1,0 +1,57 @@
+;параметры: name (строка)
+out CurrentSystemName() " a resolve req __start"
+
+0 setto resolveReqTimer
+
+; делаем запрос к локальному днс
+locguide($name) setto locguideData
+locguideData unbufferit locguideRespId 1 locguideRespAddr 1 locguideRespTime1 1 locguideRespTime2 1 locguideRespSymb1 1 locguideRespSymb2 1
+out "local DNS query=" $name " -> locguideRespId=" $locguideRespId " locguideRespAddr=" $locguideRespAddr " locguideRespTime1 =" $locguideRespTime1 " locguideRespTime2=" $locguideRespTime2 " locguideRespSymb1=" $locguideRespSymb1 " locguideRespSymb2=" $locguideRespSymb2
+
+if $locguideRespId == 0 type_0_ok_tag
+if $locguideRespId == 1 type_1_delay_tag
+if $locguideRespId == 2 type_1_delay_tag
+if $locguideRespId == 3 type_3_not_found_tag
+if $locguideRespId == 4 type_4_unknown_name_tag
+return
+
+type_0_ok_tag:
+out "type_0_ok_tag"
+$locguideRespAddr setto resolvedTheirAddr
+; отвечаем на запрос успехом
+resolveIndDataBuf pack 0 1 $locguideRespAddr 1 $locguideRespSymb1 1 $locguideRespSymb2 1 4
+timeevent A_RESOLVE.IND resolveIndTimer 1 address $resolveIndDataBuf
+return
+
+type_1_delay_tag:
+out "type_1_delay_tag or 2"
+; делаем повторный запрос через указанное время
+raise_err_in_type_1_delay_tag
+timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1 name $name
+return
+
+type_3_not_found_tag:
+out "type_3_not_found_tag"
+
+; получаем адрес глобального днс
+locguide($GUIDE) setto locguideData
+locguideData unbufferit locguideRespId 1 locguideRespAddr 1 locguideRespTime1 1 locguideRespTime2 1 locguideRespSymb1 1 locguideRespSymb2 1
+out "local DNS query=" $GUIDE " -> locguideRespId=" $locguideRespId " locguideRespAddr=" $locguideRespAddr " locguideRespTime1 =" $locguideRespTime1 " locguideRespTime2=" $locguideRespTime2 " locguideRespSymb1=" $locguideRespSymb1 " locguideRespSymb2=" $locguideRespSymb2
+$locguideRespId != 0 if guide_not_found_tag
+
+; устанавливаем соединение с глобальным днс
+namerBufForAssociateReq pack $locguideRespAddr 1 $GUIDE sizeof(GUIDE) sizeof(GUIDE)+1
+nameiBufForAssociateReq pack 0 1 $nameOurFromTransferInit sizeof(nameOurFromTransferInit) sizeof(nameOurFromTransferInit)+1
+timeevent A_ASSOCIATE.REQ associateReqTimer 1 namer $namerBufForAssociateReq namei $nameiBufForAssociateReq quality $qualityFromTransferInit demand $demandToSend1 context $contextFromTransferInit apcon $GS
+
+return
+
+type_4_unknown_name_tag:
+out "type_4_unknown_name_tag"
+raise_err
+return
+
+guide_not_found_tag:
+out "guide_no_found_tag"
+raise_err
+return

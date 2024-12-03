@@ -1,0 +1,5 @@
+;параметры:  quality (буфер), context (буфер)
+out CurrentSystemName() " p connect conf __start"
+
+timeevent A_ASSOCIATE.CONF associateConfTimer 1 context $context quality $quality demand $demandToSend1
+

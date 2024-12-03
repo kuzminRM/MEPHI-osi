@@ -1,0 +1,8 @@
+;параметры: address (буфер)
+out CurrentSystemName() " a resolve ind __start"
+
+0 setto resolveIndTimer
+
+address unbufferit addrTemp 1
+namerBufForAssociateReqDT pack $addrTemp  1 $nameTheirFromTransferInit sizeof(nameTheirFromTransferInit) sizeof(nameTheirFromTransferInit)+1
+timeevent A_ASSOCIATE.REQ associateReqTimer 1 namer $namerBufForAssociateReqDT namei $nameiBufForAssociateReq quality $qualityFromTransferInit demand $demandToSend1 context $contextFromTransferInit apcon $DT

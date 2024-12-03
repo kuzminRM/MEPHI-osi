@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p release conf __start"
+
+timeevent A_RELEASE.CONF releaseConfTimer 1 apcon $apconFromAssociateReq

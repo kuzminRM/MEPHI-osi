@@ -1,0 +1,9 @@
+;параметры: namer (строка), namei (строка), context (буфер), quality (буфер)
+out CurrentSystemName() " a transfer init req __start"
+
+$namei setto nameOurFromTransferInit
+$namer setto nameTheirFromTransferInit
+$context setto contextFromTransferInit
+$quality setto qualityFromTransferInit
+
+timeevent A_RESOLVE.REQ resolveReqTimer 1 name $nameTheirFromTransferInit

@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p release ind __start"
+
+timeevent A_RELEASE.IND releaseIndTimer 1 apcon $DT

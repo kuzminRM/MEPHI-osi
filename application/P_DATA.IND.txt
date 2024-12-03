@@ -1,0 +1,49 @@
+;параметры:  userdata (буфер)
+out CurrentSystemName() " p data ind __start"
+
+$apconFromAssociateReq == $GS if gs_tag
+$apconFromAssociateReq == $DT if dt_tag
+
+return
+
+dt_tag:
+out "dt_tag"
+userdata $userdata sendup  A_DATA.IND
+return
+
+gs_tag:
+out "gs_tag"
+
+userdata unbufferit packageType 1 locguideRespId 1 locguideRespAddr 1 locguideRespTime1 1 locguideRespTime2 1 locguideRespSymb1 1 locguideRespSymb2 1
+out "global DNS -> locguideRespId=" $locguideRespId " locguideRespAddr=" $locguideRespAddr " locguideRespTime1 =" $locguideRespTime1 " locguideRespTime2=" $locguideRespTime2 " locguideRespSymb1=" $locguideRespSymb1 " locguideRespSymb2=" $locguideRespSymb2
+
+if $locguideRespId == 0 type_0_ok_tag
+if $locguideRespId == 1 type_1_delay_tag
+if $locguideRespId == 2 type_1_delay_tag
+if $locguideRespId == 3 type_3_not_found_tag
+if $locguideRespId == 4 type_4_unknown_name_tag
+
+return
+
+type_0_ok_tag:
+out "type_0_ok global DNS _tag"
+$locguideRespAddr setto resolvedTheirAddr
+timeevent A_RELEASE.REQ releaseReqTimer 1 apcon $GS
+return
+
+type_1_delay_tag:
+out "type_1_delay global DNS _tag or 2"
+; делаем повторный запрос через указанное время
+raise_err_in_type_1_delay_tag_global_dns
+timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1 name $name
+return
+
+type_3_not_found_tag:
+out "type_3_not_found global DNS _tag"
+raise_err
+return
+
+type_4_unknown_name_tag:
+out "type_4_unknown_name global DNS _tag"
+raise_err
+return

@@ -1,0 +1,8 @@
+;параметры: namer (буфер), namei (буфер), quality (буфер), demand (буфер), context (буфер), apcon (строка)
+out CurrentSystemName() " a associate req __start"
+
+0 setto associateReqTimer
+
+$apcon setto apconFromAssociateReq
+namer unbufferit addrTemp 1
+address $addrTemp quality $quality demand $demand context $context eventdown P_CONNECT.REQ

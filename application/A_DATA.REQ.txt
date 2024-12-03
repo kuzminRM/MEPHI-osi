@@ -1,0 +1,13 @@
+;параметры: userdata (буфер)
+out CurrentSystemName() " a data req __start"
+
+queue $userdata packageQueue
+
+if $isAskedForToken == 1 end_tag
+; else - ask for token
+out "PLEASE_TOKENS.REQ"
+token 1 eventdown P_PLEASE_TOKENS.REQ
+1 setto asked_for_token
+
+end_tag:
+return

@@ -1,0 +1,4 @@
+;параметры: namei (строка), context (буфер), quality (буфер)
+out CurrentSystemName() " a transfer init resp __start"
+
+timeevent A_ASSOCIATE.RESP associateRespTimer 1 namei $nameiBufAssociateInd context $context quality $quality apcon $DT

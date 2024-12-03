@@ -1,0 +1,20 @@
+;параметры: apcon (строка)
+out CurrentSystemName() " a release conf __start"
+
+0 setto releaseConfTimer
+
+$apcon == $GS if gs_tag
+$apcon == $DT if dt_tag
+
+return
+
+gs_tag:
+out "gs_tag"
+addrBufForResolveInd pack 0 1 $addrBufForResolveInd 1 " " 1 " " 1
+timeevent A_RESOLVE.IND resolveIndTimer 1 address $resolvedTheirAddr
+return
+
+dt_tag:
+out "dt_tag"
+address $resolvedTheirAddr sendup A_TERMINATE.CONF
+return

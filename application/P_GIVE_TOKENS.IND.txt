@@ -1,0 +1,22 @@
+;параметры:  token (число)
+out CurrentSystemName() " p give tokens ind __start"
+
+if $token == 1 we_have_all_tokens_tag
+
+eventdown P_SYNC_MAJOR.REQ
+
+return
+
+we_have_all_tokens_tag:
+
+loop_tag:
+qcount(packageQueue) == 0 if end_loop_tag
+userdata dequeue(packageQueue) eventdown P_DATA.REQ
+goto loop_tag
+end_loop_tag:
+
+0 setto isAskedForToken
+token 2 eventdown P_PLEASE_TOKENS.REQ
+
+return
+

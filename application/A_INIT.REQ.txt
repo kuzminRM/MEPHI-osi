@@ -1,0 +1,57 @@
+string declare nameOurFromTransferInit
+string declare nameTheirFromTransferInit
+buffer declare contextFromTransferInit
+buffer declare qualityFromTransferInit
+
+integer declare resolveReqTimer
+integer declare resolveTimerDelay
+buffer declare locguideData
+integer declare locguideRespId
+integer declare locguideRespAddr
+integer declare locguideRespTime1
+integer declare locguideRespTime2
+string declare locguideRespSymb1
+string declare locguideRespSymb2
+buffer declare resolveIndDataBuf
+buffer declare namerBufForAssociateReq
+buffer declare namerBufForAssociateReqDT
+buffer declare nameiBufForAssociateReq
+100 setto resolveTimerDelay
+
+integer declare associateReqTimer
+string declare apconFromAssociateReq
+
+integer declare addrTemp
+string declare nameTemp
+
+integer declare associateIndTimer
+buffer declare nameiBufAssociateInd
+
+integer declare associateRespTimer
+
+integer declare associateConfTimer
+buffer declare gsUserdata
+
+queue declare packageQueue
+integer declare isAskedForToken
+
+integer declare syncMajorTimer
+
+integer declare resolveIndTimer
+buffer declare addrBufForResolveInd
+
+integer declare releaseReqTimer
+integer declare resolvedTheirAddr
+
+integer declare releaseIndTimer
+
+integer declare releaseConfTimer
+
+buffer declare demandToSend1
+string declare GS
+string declare DT
+string declare GUIDE
+demandToSend1 pack 1 1 1
+"GS" setto GS
+"DT" setto DT
+"Guide" setto GUIDE

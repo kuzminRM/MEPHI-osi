@@ -1,0 +1,6 @@
+;параметры: namei (буфер), context (буфер), quality (буфер), apcon (строка)
+out CurrentSystemName() " a associate resp __start"
+
+0 setto associateRespTimer
+namei unbufferit addrTemp 1
+address $addrTemp quality $quality context $context eventdown P_CONNECT.RESP

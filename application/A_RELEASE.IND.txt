@@ -1,0 +1,6 @@
+;параметры: apcon (строка)
+out CurrentSystemName() " a release ind __start"
+
+0 setto releaseIndTimer
+
+sendup A_TERMINATE.IND

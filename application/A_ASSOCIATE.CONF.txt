@@ -1,0 +1,21 @@
+;параметры: context (буфер), quality (буфер), demand (буфер)
+out CurrentSystemName() " a associate conf __start"
+
+0 setto associateConfTimer
+
+$apconFromAssociateReq == $GS if gs_tag
+$apconFromAssociateReq == $DT if dt_tag
+
+return
+
+gs_tag:
+out "gs_tag"
+gsUserdata pack 3 1 $nameTheirFromTransferInit sizeof(nameTheirFromTransferInit) sizeof(nameTheirFromTransferInit)+1
+userdata $gsUserdata eventdown P_DATA.REQ
+eventdown P_SYNC_MAJOR.REQ
+return
+
+dt_tag:
+out "dt_tag"
+context $context quality $quality sendup A_TRANSFER_INIT.CONF
+return
