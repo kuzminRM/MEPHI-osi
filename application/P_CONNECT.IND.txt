@@ -2,5 +2,5 @@
 out CurrentSystemName() " p connect ind __start"
 
 locguide($address) setto nameTemp
-nameiBufAssociateInd pack $address 1 $nameTemp sizeof(nameTemp)
+nameiBufAssociateInd pack $address 1 $nameTemp sizeof(nameTemp) sizeof(nameTemp)+1
 timeevent A_ASSOCIATE.IND associateIndTimer 1 namei $nameiBufAssociateInd quality $quality demand $demand

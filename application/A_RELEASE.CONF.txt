@@ -10,11 +10,13 @@ return
 
 gs_tag:
 out "gs_tag"
-addrBufForResolveInd pack 0 1 $addrBufForResolveInd 1 " " 1 " " 1
-timeevent A_RESOLVE.IND resolveIndTimer 1 address $resolvedTheirAddr
+addrBufForResolveInd pack $resolvedTheirAddr 1 1
+timeevent A_RESOLVE.IND resolveIndTimer 1 address $addrBufForResolveInd
+0 setto isConnected
 return
 
 dt_tag:
 out "dt_tag"
 address $resolvedTheirAddr sendup A_TERMINATE.CONF
+0 setto isConnected
 return

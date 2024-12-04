@@ -21,6 +21,8 @@ buffer declare nameiBufForAssociateReq
 
 integer declare associateReqTimer
 string declare apconFromAssociateReq ; тут нэйминг переменной не верный, корректнее будет correntApcon или savedApcon
+integer declare isConnected
+0 setto isConnected
 
 integer declare addrTemp
 string declare nameTemp
@@ -50,11 +52,17 @@ integer declare releaseIndTimer
 
 integer declare releaseConfTimer
 
+integer declare releaseRespTimer
+
 buffer declare demandToSend1
 string declare GS
 string declare DT
 string declare GUIDE
+string declare TEMP_SYMBOL
+integer declare TEMP_SYMBOL_LEN
 demandToSend1 pack 1 1 1
 "GS" setto GS
 "DT" setto DT
 "Guide" setto GUIDE
+"d" setto TEMP_SYMBOL
+sizeof(TEMP_SYMBOL) setto TEMP_SYMBOL_LEN

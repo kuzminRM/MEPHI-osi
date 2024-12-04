@@ -1,0 +1,3 @@
+out CurrentSystemName() " a terminate resp __start"
+
+timeevent A_RELEASE.RESP resolveIndTimer 1 apcon $DT

@@ -1,0 +1,6 @@
+;параметры: apcon (строка)
+out CurrentSystemName() " a release resp __start"
+
+0 setto releaseRespTimer
+
+eventdown P_RELEASE.RESP

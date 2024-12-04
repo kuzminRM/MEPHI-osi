@@ -34,8 +34,8 @@ return
 type_1_delay_tag:
 out "type_1_delay global DNS _tag or 2"
 ; делаем повторный запрос через указанное время
-raise_err_in_type_1_delay_tag_global_dns
-timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1 name $name
+out "repeated A_RESOLVE.REQ delayed by=" $locguideRespTime1-SystemTime()
+timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1-SystemTime() name $nameTheirFromTransferInit
 return
 
 type_3_not_found_tag:

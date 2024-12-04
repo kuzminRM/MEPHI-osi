@@ -3,6 +3,19 @@ out CurrentSystemName() " a associate req __start"
 
 0 setto associateReqTimer
 
+(($isConnected == 1) && ($apconFromAssociateReq == $apcon)) if repeated_run_tag
 $apcon setto apconFromAssociateReq
 namer unbufferit addrTemp 1
+out "connecting to " $addrTemp " (apcon=" $apcon ")"
 address $addrTemp quality $quality demand $demand context $context eventdown P_CONNECT.REQ
+
+1 setto isConnected
+
+return
+
+repeated_run_tag:
+out "repeated_run_tag"
+; при повтороном запросе сначала просим токены
+token 1 eventdown P_PLEASE_TOKENS.REQ
+; потом как получили токены делаем запрос к глобальному ДНС
+timeevent A_ASSOCIATE.CONF associateConfTimer 500 context $context quality $quality demand $demand

@@ -27,7 +27,7 @@ type_1_delay_tag:
 out "type_1_delay_tag or 2"
 ; делаем повторный запрос через указанное время
 raise_err_in_type_1_delay_tag
-timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1 name $name
+; timeevent A_RESOLVE.REQ resolveReqTimer $locguideRespTime1 name $name
 return
 
 type_3_not_found_tag:

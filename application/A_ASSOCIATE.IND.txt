@@ -2,5 +2,5 @@
 out CurrentSystemName() " a associate ind __start"
 
 0 setto associateIndTimer
-namei unbufferit addrTemp 1 nameTemp sizeof(namei) sizeof(namei)+1
+namei unbufferit addrTemp 1 nameTemp sizeof(namei)-1
 namei $nameTemp quality $quality sendup A_TRANSFER_INIT.IND
