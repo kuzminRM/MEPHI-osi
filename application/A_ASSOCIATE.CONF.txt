@@ -12,7 +12,7 @@ gs_tag:
 out "gs_tag"
 gsUserdata pack 3 1 $nameTheirFromTransferInit sizeof(nameTheirFromTransferInit) sizeof(nameTheirFromTransferInit)+1
 userdata $gsUserdata eventdown P_DATA.REQ
-eventdown P_SYNC_MAJOR.REQ
+timeevent A_SYNC_MAJOR_TIMER syncMajorTimer $syncTimeout
 return
 
 dt_tag:

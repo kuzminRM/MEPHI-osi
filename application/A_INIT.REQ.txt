@@ -6,6 +6,7 @@ buffer declare qualityFromTransferInit
 integer declare resolveReqTimer
 integer declare resolveTimerDelay
 buffer declare locguideData
+integer declare packageType
 integer declare locguideRespId
 integer declare locguideRespAddr
 integer declare locguideRespTime1
@@ -19,7 +20,7 @@ buffer declare nameiBufForAssociateReq
 100 setto resolveTimerDelay
 
 integer declare associateReqTimer
-string declare apconFromAssociateReq
+string declare apconFromAssociateReq ; тут нэйминг переменной не верный, корректнее будет correntApcon или savedApcon
 
 integer declare addrTemp
 string declare nameTemp
@@ -36,6 +37,8 @@ queue declare packageQueue
 integer declare isAskedForToken
 
 integer declare syncMajorTimer
+integer declare syncTimeout
+1 setto syncTimeout
 
 integer declare resolveIndTimer
 buffer declare addrBufForResolveInd

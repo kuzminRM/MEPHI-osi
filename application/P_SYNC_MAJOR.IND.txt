@@ -1,0 +1,4 @@
+;параметры:  нет
+out CurrentSystemName() " p sync major ind __start"
+
+eventdown P_SYNC_MAJOR.RESP

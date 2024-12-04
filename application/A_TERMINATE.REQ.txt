@@ -1,0 +1,4 @@
+;параметры: нет
+out CurrentSystemName() " a terminate req __start"
+
+timeevent A_RELEASE.REQ releaseReqTimer 1 apcon $apconFromAssociateReq

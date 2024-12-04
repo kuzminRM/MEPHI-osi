@@ -1,0 +1,3 @@
+out CurrentSystemName() " a sync major timer __start"
+
+eventdown P_SYNC_MAJOR.REQ
