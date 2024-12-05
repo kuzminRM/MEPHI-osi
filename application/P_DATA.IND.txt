@@ -4,6 +4,8 @@ out CurrentSystemName() " p data ind __start"
 $apconFromAssociateReq == $GS if gs_tag
 $apconFromAssociateReq == $DT if dt_tag
 
+; one more костыль
+goto dt_tag
 return
 
 dt_tag:

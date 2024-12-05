@@ -1,0 +1,26 @@
+;параметры:  error (число)
+out CurrentSystemName() " p p exception ind __start"
+
+$error == 1 if data_token_problem_tag
+$error == 2 if sync_token_problem_tag
+$error == 3 if package_problem_tag
+
+out "unexpected error code"
+raise_err_unexpected_error_code
+return
+
+data_token_problem_tag:
+out "data_token_problem_tag"
+out "sending give tokens req 1 (data)"
+token 1 eventdown P_GIVE_TOKENS.REQ
+return
+
+sync_token_problem_tag:
+out "sync_token_problem_tag"
+out "sending give tokens req 2 (sync)"
+token 2 eventdown P_GIVE_TOKENS.REQ
+return
+
+package_problem_tag:
+raise_err_package_problem
+return

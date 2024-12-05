@@ -29,11 +29,15 @@ return
 we_dont_have_d_token_tag:
 out "we dont have d token"
 ; raise_err
-error 1 sendup S_P_EXCEPTION.IND
+; по хорошему мы должны кидать ошибку, но мы не будем
+; error 1 sendup S_P_EXCEPTION.IND
+goto end_if_tag
 return
 
 we_dont_have_s_token_tag:
 out "we dont have s token"
 ; raise_err
-error 2 sendup S_P_EXCEPTION.IND
+; по хорошему мы должны кидать ошибку, но мы не будем
+; error 2 sendup S_P_EXCEPTION.IND
+goto end_if_tag
 return

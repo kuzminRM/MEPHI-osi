@@ -40,6 +40,7 @@ integer declare isAskedForToken
 
 integer declare syncMajorTimer
 integer declare syncTimeout
+0 setto syncMajorTimer
 1 setto syncTimeout
 
 integer declare resolveIndTimer
