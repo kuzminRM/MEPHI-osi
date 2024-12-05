@@ -1,1 +1,2 @@
 ;параметры:  нет
+out CurrentSystemName() " p sync major conf __start"

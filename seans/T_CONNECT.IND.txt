@@ -2,3 +2,10 @@
 out CurrentSystemName() " t connect ind __start"
 
 address $address eventdown T_CONNECT.RESP
+
+; костыль в s connect req и t connect ind
+((qcount(outputDataQueue) == 0) && (qcount(inputDataQueue) == 0)) if skip_tag
+out "костыль отработал / перед очисткой длина outputDataQueue=" qcount(outputDataQueue) " inputDataQueue=" qcount(inputDataQueue)
+clearqueue outputDataQueue
+clearqueue inputDataQueue
+skip_tag:

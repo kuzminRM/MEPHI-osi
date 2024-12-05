@@ -5,3 +5,10 @@ address $address eventdown T_CONNECT.REQ
 $address setto addressFromConnectReq
 $quality setto qualityFromConnectReq
 $demand setto demandFromConnectReq
+
+; костыль
+((qcount(outputDataQueue) == 0) && (qcount(inputDataQueue) == 0)) if skip_tag
+out "костыль отработал / перед очисткой длина outputDataQueue=" qcount(outputDataQueue) " inputDataQueue=" qcount(inputDataQueue)
+clearqueue outputDataQueue
+clearqueue inputDataQueue
+skip_tag:
