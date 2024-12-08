@@ -4,3 +4,8 @@ out CurrentSystemName() " a associate ind __start"
 0 setto associateIndTimer
 namei unbufferit addrTemp 1 nameTemp sizeof(namei)-1
 namei $nameTemp quality $quality sendup A_TRANSFER_INIT.IND
+
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
+-1 setto weHaveDToken
+-1 setto weHaveSToken
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken

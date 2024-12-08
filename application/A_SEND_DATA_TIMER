@@ -1,0 +1,31 @@
+out CurrentSystemName() " a send data timer __start"
+
+0 setto sendDataTimer
+
+$weHaveDToken == 0 if no_d_token_tag
+
+; отправялем данные есть есть токен данных
+loop_tag:
+qcount(packageQueue) == 0 if end_loop_tag
+out "sending data packageQueue len = " qcount(packageQueue)
+userdata dequeue(packageQueue) eventdown P_DATA.REQ
+goto loop_tag
+end_loop_tag:
+
+; синхронизируем данные есть есть токен синхронизации
+$weHaveSToken == 0 if ask_for_s_token_tag
+out "sending sync signal"
+timeevent A_SYNC_MAJOR_TIMER syncMajorTimer $syncTimeout
+
+return
+
+ask_for_s_token_tag:
+out "ask_for_s_token_tag"
+token 2 eventdown P_PLEASE_TOKENS.REQ
+return
+
+no_d_token_tag:
+out "no_d_token_tag asking for d token"
+token 1 eventdown P_PLEASE_TOKENS.REQ
+1 setto isAskedForToken
+return

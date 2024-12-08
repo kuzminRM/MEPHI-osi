@@ -3,6 +3,8 @@ out CurrentSystemName() " a associate req __start"
 
 0 setto associateReqTimer
 
+(($isConnected == 1) && ($apconFromAssociateReq == $apcon)) if repeated_run_tag
+
 ; запоминаем токены
 demand unbufferit demandInt 1
 $demandInt == 1 if demand_1_tag
@@ -10,8 +12,8 @@ $demandInt == 2 if demand_2_tag
 $demandInt == 3 if demand_3_tag
 $demandInt == 4 if demand_4_tag
 demand_final_tag:
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
 
-(($isConnected == 1) && ($apconFromAssociateReq == $apcon)) if repeated_run_tag
 $apcon setto apconFromAssociateReq
 namer unbufferit addrTemp 1
 out "connecting to " $addrTemp " (apcon=" $apcon ")"
@@ -23,6 +25,7 @@ return
 
 repeated_run_tag:
 out "repeated_run_tag"
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
 ; при повтороном запросе сначала просим токены
 token 1 eventdown P_PLEASE_TOKENS.REQ
 ; потом как получили токены делаем запрос к глобальному ДНС

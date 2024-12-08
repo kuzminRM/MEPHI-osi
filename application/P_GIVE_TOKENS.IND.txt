@@ -4,29 +4,17 @@ out CurrentSystemName() " p give tokens ind __start"
 $token == 1 if d_token_tag
 $token == 2 if s_token_tag
 go_back_tag:
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
 
-if $token == 1 we_have_all_tokens_tag
-
-eventdown P_SYNC_MAJOR.REQ
-
-return
-
-we_have_all_tokens_tag:
-
-loop_tag:
-qcount(packageQueue) == 0 if end_loop_tag
-userdata dequeue(packageQueue) eventdown P_DATA.REQ
-goto loop_tag
-end_loop_tag:
-
-0 setto isAskedForToken
-token 2 eventdown P_PLEASE_TOKENS.REQ
+out "try to send data"
+timeevent A_SEND_DATA_TIMER sendDataTimer 1
 
 return
 
 d_token_tag:
 out "received d token"
 1 setto weHaveDToken
+0 setto isAskedForToken
 goto go_back_tag
 return
 

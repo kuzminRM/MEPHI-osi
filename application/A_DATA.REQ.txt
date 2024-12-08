@@ -3,14 +3,28 @@ out CurrentSystemName() " a data req __start"
 
 queue $userdata packageQueue
 out "new packageQueue length is " qcount(packageQueue)
-out "isAskedForToken=" $isAskedForToken
-if $isAskedForToken == 1 end_tag
-; else - ask for token
-out "sending plese tokens req"
-token 1 eventdown P_PLEASE_TOKENS.REQ
-1 setto isAskedForToken
 
+out "isAskedForToken=" $isAskedForToken
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
+
+(($weHaveDToken == 0) && ($isAskedForToken == 1)) if skip_tag
+(($weHaveDToken == 0) && ($isAskedForToken == 0)) if ask_for_d_token_tag
+$weHaveDToken == 1 if send_data_tag
+
+skip_tag:
+out "skip_tag"
+; данные положены в очередь как придет токен они отправлятся
 return
 
-end_tag:
+ask_for_d_token_tag:
+out "ask_for_d_token_tag"
+; просим токен, как только его получим отпраим данные
+token 1 eventdown P_PLEASE_TOKENS.REQ
+1 setto isAskedForToken
+return
+
+send_data_tag:
+out "send_data_tag"
+; у нас все есть, отправляем данные
+timeevent A_SEND_DATA_TIMER sendDataTimer 1
 return

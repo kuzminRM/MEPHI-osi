@@ -10,9 +10,11 @@ return
 
 gs_tag:
 out "gs_tag"
+; как только подключились к справочнику отправляем запрос на получение данных об адресе нужного нам узла
 gsUserdata pack 3 1 $nameTheirFromTransferInit sizeof(nameTheirFromTransferInit) sizeof(nameTheirFromTransferInit)+1
-userdata $gsUserdata eventdown P_DATA.REQ
-timeevent A_SYNC_MAJOR_TIMER syncMajorTimer $syncTimeout
+queue $gsUserdata packageQueue
+out "new packageQueue length is " qcount(packageQueue)
+timeevent A_SEND_DATA_TIMER sendDataTimer 1
 return
 
 dt_tag:

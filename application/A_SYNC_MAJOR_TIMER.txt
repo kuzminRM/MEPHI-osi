@@ -2,4 +2,15 @@ out CurrentSystemName() " a sync major timer __start"
 
 0 setto syncMajorTimer
 
+$syncInProgress == 1 if delay_one_more_sync_tag
+
+out "call sync"
 eventdown P_SYNC_MAJOR.REQ
+1 setto syncInProgress
+
+return
+
+delay_one_more_sync_tag:
+out "delay one more sync"
+1 setto oneMoreSyncRequired
+return

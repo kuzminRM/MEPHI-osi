@@ -7,6 +7,8 @@ $token == 1 if d_token_tag
 $token == 2 if s_token_tag
 go_back_tag:
 
+out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
+qcount(packageQueue) > 0 if warning_tag
 return
 
 d_token_tag:
@@ -19,4 +21,8 @@ s_token_tag:
 out "giving s token"
 0 setto weHaveSToken
 goto go_back_tag
+return
+
+warning_tag:
+out "WARNING : we give token but have usended data in the amount of " qcount(packageQueue)
 return

@@ -1,2 +1,14 @@
 ;параметры:  нет
 out CurrentSystemName() " p sync major conf __start"
+
+0 setto syncInProgress
+
+1 == $oneMoreSyncRequired if run_one_more_sync_tag
+
+return
+
+run_one_more_sync_tag:
+out "running one more sync"
+timeevent A_SYNC_MAJOR_TIMER syncMajorTimer $syncTimeout
+0 setto oneMoreSyncRequired
+return

@@ -43,6 +43,11 @@ buffer declare gsUserdata
 
 queue declare packageQueue
 integer declare isAskedForToken
+integer declare syncInProgress
+integer declare oneMoreSyncRequired
+0 setto isAskedForToken
+0 setto syncInProgress
+0 setto oneMoreSyncRequired
 
 integer declare syncMajorTimer
 integer declare syncTimeout
@@ -58,6 +63,8 @@ integer declare resolvedTheirAddr
 integer declare releaseIndTimer
 
 integer declare releaseConfTimer
+
+integer declare sendDataTimer
 
 integer declare releaseRespTimer
 
