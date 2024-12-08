@@ -4,3 +4,29 @@ out CurrentSystemName() " p connect ind __start"
 locguide($address) setto nameTemp
 nameiBufAssociateInd pack $address 1 $nameTemp sizeof(nameTemp) sizeof(nameTemp)+1
 timeevent A_ASSOCIATE.IND associateIndTimer 1 namei $nameiBufAssociateInd quality $quality demand $demand
+
+; запоминаем токены
+demand unbufferit demandInt 1
+$demandInt == 1 if demand_1_tag
+$demandInt == 2 if demand_2_tag
+$demandInt == 3 if demand_3_tag
+$demandInt == 4 if demand_4_tag
+demand_1_tag:
+0 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_2_tag:
+1 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_3_tag:
+0 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+demand_4_tag:
+1 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+demand_final_tag:
+
+return

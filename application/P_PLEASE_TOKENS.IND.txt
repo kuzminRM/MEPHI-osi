@@ -2,3 +2,21 @@
 out CurrentSystemName() " p please tokens ind __start"
 
 token $token eventdown P_GIVE_TOKENS.REQ
+
+$token == 1 if d_token_tag
+$token == 2 if s_token_tag
+go_back_tag:
+
+return
+
+d_token_tag:
+out "giving d token"
+0 setto weHaveDToken
+goto go_back_tag
+return
+
+s_token_tag:
+out "giving s token"
+0 setto weHaveSToken
+goto go_back_tag
+return

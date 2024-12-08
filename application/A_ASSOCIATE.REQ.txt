@@ -3,6 +3,14 @@ out CurrentSystemName() " a associate req __start"
 
 0 setto associateReqTimer
 
+; запоминаем токены
+demand unbufferit demandInt 1
+$demandInt == 1 if demand_1_tag
+$demandInt == 2 if demand_2_tag
+$demandInt == 3 if demand_3_tag
+$demandInt == 4 if demand_4_tag
+demand_final_tag:
+
 (($isConnected == 1) && ($apconFromAssociateReq == $apcon)) if repeated_run_tag
 $apcon setto apconFromAssociateReq
 namer unbufferit addrTemp 1
@@ -19,3 +27,25 @@ out "repeated_run_tag"
 token 1 eventdown P_PLEASE_TOKENS.REQ
 ; потом как получили токены делаем запрос к глобальному ДНС
 timeevent A_ASSOCIATE.CONF associateConfTimer 500 context $context quality $quality demand $demand
+return
+
+demand_1_tag:
+1 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+return
+demand_2_tag:
+0 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+return
+demand_3_tag:
+1 setto weHaveDToken
+0 setto weHaveSToken
+goto demand_final_tag
+return
+demand_4_tag:
+0 setto weHaveDToken
+1 setto weHaveSToken
+goto demand_final_tag
+return

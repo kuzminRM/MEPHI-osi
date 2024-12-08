@@ -26,6 +26,12 @@ integer declare isConnected
 
 integer declare addrTemp
 string declare nameTemp
+integer declare demandInt
+
+integer declare weHaveDToken
+integer declare weHaveSToken
+0 setto weHaveDToken
+0 setto weHaveSToken
 
 integer declare associateIndTimer
 buffer declare nameiBufAssociateInd

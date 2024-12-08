@@ -1,6 +1,9 @@
 ;параметры:  error (число)
 out CurrentSystemName() " p p exception ind __start"
 
+; этот приметив не используется
+raise_err
+
 $error == 1 if data_token_problem_tag
 $error == 2 if sync_token_problem_tag
 $error == 3 if package_problem_tag
