@@ -1,5 +1,8 @@
 out CurrentSystemName() " t delay tim __start"
 
+; очень жесткий костыль из прикладного уровня
+((CurrentSystemName() == "Guide") && (SystemTime() > 1207000))if skip_it_workaround_tag
+
 ; для дебагинга
 out "qcount " qcount (sendQueue)
 
@@ -29,4 +32,9 @@ return
 
 drop_timer_tag:
 0 setto delayTimer
+return
+
+skip_it_workaround_tag:
+out "skip_it_workaround_tag"
+clearqueue sendQueue
 return

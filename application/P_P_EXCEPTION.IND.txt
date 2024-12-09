@@ -1,8 +1,7 @@
 ;параметры:  error (число)
 out CurrentSystemName() " p p exception ind __start"
 
-; этот приметив не используется
-raise_err
+; этот приметив не используется, в финальной версии все проходит без ошибок
 
 $error == 1 if data_token_problem_tag
 $error == 2 if sync_token_problem_tag
@@ -25,5 +24,6 @@ token 2 eventdown P_GIVE_TOKENS.REQ
 return
 
 package_problem_tag:
-raise_err_package_problem
+out "package_problem_tag"
+token 0 eventdown P_RESYNCHRONIZE.REQ
 return

@@ -2,3 +2,12 @@
 out CurrentSystemName() " t disconnect ind __start"
 ; вызывается после S_U_ABORT.REQ
 ; вызывается после S_RELEASE.RESP
+
+((1207000  < SystemTime()) && (SystemTime() < 1209000))if bug_cached_tag
+
+return
+
+bug_cached_tag:
+out "######################## bug_cached_tag #############################"
+raise_mistery_disconnect
+return

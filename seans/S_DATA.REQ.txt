@@ -1,6 +1,6 @@
 ;параметры:   userdata (буфер)
 out CurrentSystemName() " s data req __start"
-
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 ; проверяем что у нас есть токен данных
 $weHaveDToken == 0 if no_d_token_tag
 
@@ -10,7 +10,7 @@ queue $userdata outputDataQueue
 ; отправляем данные
 dataToSend pack 4 1 $userdata sizeof(userdata) sizeof(userdata)+1
 userdata $dataToSend eventdown T_DATA.REQ
-
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 return
 
 no_d_token_tag:

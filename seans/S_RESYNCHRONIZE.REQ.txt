@@ -1,0 +1,9 @@
+;параметры:  token (число)
+out CurrentSystemName() " s resynchronize req __start"
+
+dataToSend pack 12 1 1
+userdata $dataToSend eventdown T_DATA.REQ
+
+clearqueue inputDataQueue
+
+return

@@ -1,0 +1,17 @@
+out CurrentSystemName() " s send data again timer __start"
+
+0 setto sendDataAgainTimer
+
+loop_tag:
+qcount(outputDataQueue) == 0 if end_loop_tag
+out "sending data outputDataQueue len = " qcount(outputDataQueue)
+
+dequeue(packageQueue) setto dataToSend
+dataToSend pack 4 1 $dataToSend sizeof(dataToSend) sizeof(dataToSend)+1
+userdata $dataToSend eventdown T_DATA.REQ
+
+goto loop_tag
+end_loop_tag:
+
+out "calling sync req again"
+timeevent S_SYNC_MAJOR.REQ syncMajorTimer 1

@@ -6,6 +6,6 @@ namei unbufferit addrTemp 1 nameTemp sizeof(namei)-1
 namei $nameTemp quality $quality sendup A_TRANSFER_INIT.IND
 
 out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken
--1 setto weHaveDToken
--1 setto weHaveSToken
+0 setto weHaveDToken
+0 setto weHaveSToken
 out "application : weHaveDToken=" $weHaveDToken " weHaveSToken=" $weHaveSToken

@@ -1,0 +1,4 @@
+;параметры:  token (число)
+out CurrentSystemName() " p resynchronize req __start"
+
+token $token eventdown S_RESYNCHRONIZE.REQ

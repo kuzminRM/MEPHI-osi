@@ -14,7 +14,7 @@ end_loop_tag:
 
 ; синхронизируем данные есть есть токен синхронизации
 $weHaveSToken == 0 if ask_for_s_token_tag
-out "sending sync signal"
+out "try to send sync signal"
 timeevent A_SYNC_MAJOR_TIMER syncMajorTimer $syncTimeout
 
 return

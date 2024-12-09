@@ -9,6 +9,7 @@
 ; 9 - S_EXPEDITED_DATA.REQ
 ; 10 - S_RELEASE.REQ
 ; 11 - S_RELEASE.RESP
+; 12 - S_RESYNCHRONIZE.REQ
 
 integer declare addressFromConnectReq
 buffer declare qualityFromConnectReq
@@ -26,6 +27,9 @@ buffer declare dataToSend
 buffer declare dataReceived
 
 integer declare entityNum
+
+integer declare sendDataAgainTimer
+integer declare syncMajorTimer
 
 integer declare demandInt
 integer declare weAreInitiator

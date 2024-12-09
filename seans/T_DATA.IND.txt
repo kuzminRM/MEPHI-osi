@@ -16,6 +16,7 @@ $entityNum == 8 if s_sync_major_resp_tag
 $entityNum == 9 if s_expedited_data_req_tag
 $entityNum == 10 if s_release_req_tag
 $entityNum == 11 if s_release_resp_tag
+$entityNum == 12 if s_resynchronize_req_tag
 
 return
 
@@ -74,13 +75,16 @@ return
 
 s_data_req_tag:
 out "received s_data_req"
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 ; кладем пакет в очередь входящих
 queue $dataReceived inputDataQueue
 out "new length = " qcount (inputDataQueue)
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 return
 
 s_sync_major_req_tag:
 out "received s_sync_major_req"
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 ; получаем длину очереди на другой стороне
 dataReceived unbufferit receivedDataQueLength 1
 
@@ -89,12 +93,13 @@ qcount (inputDataQueue) != $receivedDataQueLength if data_queue_length_differ_ta
 
 ; запускаем процесс передачи данных
 timeevent S_SEND_UP_DATA_TIMER sendDataUpTimer $SEND_UP_DATA_DELAY
-
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 return
 
 data_queue_length_differ_tag:
 out "data_queue_length_differ our = " qcount (inputDataQueue) " their = " $receivedDataQueLength
-raise_err
+; raise_err_queue_length_differ
+error 3 sendup S_P_EXCEPTION.IND
 return
 
 s_please_tokens_req_tag:
@@ -132,10 +137,12 @@ return
 
 s_sync_major_resp_tag:
 out "received s_sync_major_resp"
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 ; обнуляем очередь на выход
 clearqueue outputDataQueue
 ; отправляем подтверждение
 sendup S_SYNC_MAJOR.CONF
+out "DEBUG: " CurrentSystemName()  " : out=" qcount(outputDataQueue) " in=" qcount(inputDataQueue)
 return
 
 s_expedited_data_req_tag:
@@ -154,4 +161,9 @@ s_release_resp_tag:
 out "received s_release_resp"
 ; отправялем индикацию
 sendup S_RELEASE.CONF
+return
+
+s_resynchronize_req_tag:
+out "received s_resynchronize_req"
+timeevent S_SEND_DATA_AGAIN_TIMER sendDataAgainTimer 1
 return
